@@ -1,0 +1,13 @@
+RewriteEngine On
+# falls Verzeichnis
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+# oder Datei
+RewriteCond %{REQUEST_FILENAME} -f
+# die nächsten zwei Zeilen überspringen
+RewriteRule .* - [S=2]
+RewriteRule ^.ajax/(.*)$ index.php?_type=ajax&_url=$1 [QSA,L]
+RewriteRule ^(.*)$ index.php?_url=$1 [QSA,L]
+
+ErrorDocument 404 /error_pages/404.php
+
+Options -MultiViews
