@@ -1,5 +1,5 @@
 <?php
-namespace Pizza\Library;
+namespace Pizza\Model;
 
 /**
  * @brief Datenbankschnittstelle

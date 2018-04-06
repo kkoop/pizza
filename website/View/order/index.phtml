@@ -1,0 +1,27 @@
+<div class="container">
+
+<?php if (!empty($openOrderDays)): ?>
+  <h2>Offene Bestellungen</h1>
+  <ul class="list-group">
+<?php foreach ($openOrderDays as $order) : ?>
+    <li class="list-group-item">
+      <a href="#todo"><?= strftime("%x %X", $order->time) ?></a> 
+      <span class="badge"><?=$order->orderCount?></span>
+    </li>
+<?php endforeach; ?>
+  </ul>
+<?php endif; ?>
+
+<?php if (!empty($pastOrderDays)): ?>
+  <h2>Abgeschlossene Bestellungen</h2>
+  <ul class="list-group">
+<?php foreach ($pastOrderDays as $order): ?>
+    <li class="list-group-item">
+      <a href="#todo"><?= strftime("%x %X", $order->time) ?></a> 
+      <span class="badge"><?=$order->orderCount?></span>
+    </li>
+<?php endforeach; ?>
+  </ul>
+<?php endif; ?>
+  
+</div>

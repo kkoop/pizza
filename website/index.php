@@ -22,7 +22,7 @@ session_start();
 
 // falls nicht angemeldet: prüfen, ob rememberme-Cookie gesetzt ist
 if (!isset($_SESSION['user']) && isset($_COOKIE['rememberme'])) {
-  if ($user = User::fromRememberToken($_COOKIE['rememberme'])) {
+  if ($user = Model\User::fromRememberToken($_COOKIE['rememberme'])) {
     $_SESSION['user'] = $user;
   }
 }

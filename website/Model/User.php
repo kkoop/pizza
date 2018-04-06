@@ -36,28 +36,28 @@ class User {
  */
   public static function login($account, $password, $ip=null)
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT user.* ".
+    $stmt = Db::prepare("SELECT user.* ".
       "FROM user ".
       "WHERE login=:login AND token IS NULL");
     $stmt->execute(array(":login"=>$account));
-    $stmt->setFetchMode(\PDO::FETCH_CLASS, "User");
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, get_class());
     if ($user = $stmt->fetch(\PDO::FETCH_CLASS)) {
       if (password_verify($password, $user->password)) {
         // fehlgeschlagene Versuche für die IP zurücksetzen
         /*if ($ip) {
-          $stmt = \Pizza\Library\Db::prepare("DELETE FROM user__failedlogin WHERE ip=:ip");
+          $stmt = Db::prepare("DELETE FROM user__failedlogin WHERE ip=:ip");
           $stmt->execute(array(":ip"=>$ip));
         }*/
         $user->doLogin();
         return $user;
       }
       // fehlgeschlagene Versuche für diesen Benutzer hochzählen
-      /*$stmt = \Pizza\Library\Db::prepare("UPDATE user SET failedlogins=last_insert_id(failedlogins+1) WHERE id=:id");
+      /*$stmt = Db::prepare("UPDATE user SET failedlogins=last_insert_id(failedlogins+1) WHERE id=:id");
       $stmt->execute(array(":id"=>$user->id));*/
     }
     // fehlgeschlagene Versuche für diese IP hochzählen
     /*if ($ip) {
-      $stmt = \Pizza\Library\Db::prepare("INSERT INTO user__failedlogin (ip) VALUES (:ip) ON DUPLICATE KEY UPDATE failedcount=failedcount+1");
+      $stmt = Db::prepare("INSERT INTO user__failedlogin (ip) VALUES (:ip) ON DUPLICATE KEY UPDATE failedcount=failedcount+1");
       $stmt->execute(array(":ip"=>$ip));
     }*/
     return null;
@@ -71,7 +71,7 @@ class User {
  */
   public static function fromRememberToken($token)
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT user.* ".
+    $stmt = Db::prepare("SELECT user.* ".
       "FROM user__remember ".
       "INNER JOIN user ON user.id=user__remember.user ".
       "WHERE user__remember.token=:token AND disabled=0 AND user.token IS NULL");
@@ -93,7 +93,7 @@ class User {
   {
     $token = bin2hex(random_bytes(32));
     $hash = hash("sha256", $token);
-    $stmt = \Pizza\Library\Db::prepare("INSERT INTO user__remember (token,user) VALUES (:token,:user)");
+    $stmt = Db::prepare("INSERT INTO user__remember (token,user) VALUES (:token,:user)");
     if ($stmt->execute(array(":token"=> $hash, ":user"=>$this->id))) {
       return $token;
     }
@@ -103,14 +103,14 @@ class User {
   private function doLogin()
   {
     $this->init();
-/*    $stmt = \Pizza\Library\Db::prepare("UPDATE user SET lastlogin=NOW(),failedlogins=0 WHERE id=:id");
+/*    $stmt = Db::prepare("UPDATE user SET lastlogin=NOW(),failedlogins=0 WHERE id=:id");
     $stmt->execute(array(":id"=>$this->id));*/
     Log::info("login", $this);
   }
   
 /*  public static function failedCountForIp($ip)
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT COALESCE(SUM(failedcount),0) FROM user__failedlogin WHERE ip=:ip");
+    $stmt = Db::prepare("SELECT COALESCE(SUM(failedcount),0) FROM user__failedlogin WHERE ip=:ip");
     $stmt->execute(array(":ip"=>$ip));
     return $stmt->fetchColumn();
   }*/
@@ -130,7 +130,7 @@ class User {
   {
     Log::info("logout", $this);
     if ($token!==null) {
-      $stmt = \Pizza\Library\Db::prepare("DELETE FROM user__remember WHERE token=:token");
+      $stmt = Db::prepare("DELETE FROM user__remember WHERE token=:token");
       $stmt->execute(array(":token"=>hash("sha256", $token)));
     }
   }
@@ -143,7 +143,7 @@ class User {
  */
   public static function read($id)
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT user.* ".
+    $stmt = Db::prepare("SELECT user.* ".
       "FROM user ".
       "WHERE user.id=:id");
     $stmt->execute(array(":id"=>$id));
@@ -166,7 +166,7 @@ class User {
  */
   public static function fromToken($token)
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT user.* ".
+    $stmt = Db::prepare("SELECT user.* ".
       "FROM user ".
       "WHERE user.token=:token");
     $stmt->execute(array(":token"=>hash("sha256", $token)));
@@ -188,11 +188,11 @@ class User {
  */
   public function changePw($oldpw, $newpw) 
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT password FROM user WHERE id=:id");
+    $stmt = Db::prepare("SELECT password FROM user WHERE id=:id");
     $stmt->execute(array(":id"=>$this->id));
     if ($res = $stmt->fetch()) {
       if ($oldpw===null || password_verify($oldpw, $res['password'])) {
-        $stmt = \Pizza\Library\Db::prepare("UPDATE user SET password=:password,token=NULL WHERE id=:id");
+        $stmt = Db::prepare("UPDATE user SET password=:password,token=NULL WHERE id=:id");
         return $stmt->execute(array(":password"=>password_hash($newpw, PASSWORD_DEFAULT),":id"=>$this->id));
       }
     }
@@ -227,7 +227,7 @@ class User {
  */
   public static function readAll()
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT * FROM user");
+    $stmt = Db::prepare("SELECT * FROM user");
     $stmt->execute();
     return $stmt->fetchAll(\PDO::FETCH_CLASS, "User");
   }
@@ -239,7 +239,7 @@ class User {
  */
   public static function loginExists($login)
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT login FROM user WHERE login=:login");
+    $stmt = Db::prepare("SELECT login FROM user WHERE login=:login");
     $stmt->execute(array(":login"=>$login));
     return $stmt->fetch() !== false;
   }
@@ -254,12 +254,12 @@ class User {
   {
     $token = bin2hex(random_bytes(32));
     $hash = hash("sha256", $token);
-    $stmt = \Pizza\Library\Db::prepare("INSERT INTO user (login,name,token,rights) VALUES (:login,:name,:token,:rights)");
+    $stmt = Db::prepare("INSERT INTO user (login,name,token,rights) VALUES (:login,:name,:token,:rights)");
     if ($stmt->execute(array(":login"    => $login,
                              ":name"     => $name,
                              ":token"    => $hash,
                              ":rights"   => $rights))) {
-      Log::info("user '$login' (".\Pizza\Library\Db::lastInsertId().") created");
+      Log::info("user '$login' (".Db::lastInsertId().") created");
       Mailer::mail($login, $mailSubject, sprintf($mailText, $token));
       return true;
     }
@@ -292,7 +292,7 @@ class User {
    */
   public function change($name, $rights, $disabled=0)
   {
-    $stmt = \Pizza\Library\Db::prepare("UPDATE user SET name=:name,rights=:rights,disabled=:disabled ".
+    $stmt = Db::prepare("UPDATE user SET name=:name,rights=:rights,disabled=:disabled ".
       "WHERE id=:id AND school=:school");
     if ($stmt->execute(array(":id"       => $this->id,
                              ":name"     => $name,
@@ -318,13 +318,13 @@ class User {
     if (!User::loginExists($email)) 
       return false;
     // zunächst prüfen, ob von dieser IP schon Anfragen in den letzten 24 Stunden kamen
-    $stmt = \Pizza\Library\Db::prepare("SELECT COUNT(*) FROM user__passwordreset WHERE ip=? AND TIMESTAMPDIFF(HOUR, time, NOW())<24");
+    $stmt = Db::prepare("SELECT COUNT(*) FROM user__passwordreset WHERE ip=? AND TIMESTAMPDIFF(HOUR, time, NOW())<24");
     $stmt->execute(array($ip));
     if ($stmt->fetchColumn(0)>=10) {
       return false;
     }
     // prüfen, ob für diese E-Mail schon Abfragen in den letzten 24 Stunden kamen
-    $stmt = \Pizza\Library\Db::prepare("SELECT COUNT(*) FROM user__passwordreset JOIN user ON user.id=user__passwordreset.user WHERE user.login=?");
+    $stmt = Db::prepare("SELECT COUNT(*) FROM user__passwordreset JOIN user ON user.id=user__passwordreset.user WHERE user.login=?");
     $stmt->execute(array($ip));
     if ($stmt->fetchColumn(0)>=3) {
       return false;
@@ -333,7 +333,7 @@ class User {
     $token = bin2hex(random_bytes(32));
     $hash = hash("sha256", $token);
     Mailer::mail($email, $mailSubject, sprintf($mailText, $token));
-    $stmt = \Pizza\Library\Db::prepare("INSERT INTO user__passwordreset (user,token,ip) SELECT id,:token,:ip FROM user WHERE login=:email");
+    $stmt = Db::prepare("INSERT INTO user__passwordreset (user,token,ip) SELECT id,:token,:ip FROM user WHERE login=:email");
     return $stmt->execute(array(":email"=>$email, ":token"=>$hash, ":ip"=>$ip));
   }
   
@@ -345,7 +345,7 @@ class User {
  */
   public static function validResetToken($token) 
   {
-    $stmt = \Pizza\Library\Db::prepare("SELECT EXISTS (SELECT * FROM user__passwordreset WHERE token=? AND resetted=0)");
+    $stmt = Db::prepare("SELECT EXISTS (SELECT * FROM user__passwordreset WHERE token=? AND resetted=0)");
     $stmt->execute(array(hash("sha256", $token)));
     return (boolean)$stmt->fetchColumn(0);
   }
@@ -360,14 +360,14 @@ class User {
   public static function passwordReset($token, $newPassword)
   {
     $hash = hash("sha256", $token);
-    $stmt = \Pizza\Library\Db::prepare("SELECT * FROM user__passwordreset WHERE token=? AND resetted=0");
+    $stmt = Db::prepare("SELECT * FROM user__passwordreset WHERE token=? AND resetted=0");
     $stmt->execute(array($hash));
     if ($row = $stmt->fetch()) {
       if ($user = User::read($row['user'])) {
         if ($user->changePw(null, $newPassword)) {
           $_SESSION['user'] = $user;
           Log::info("password reset for user '{$user->login}' ({$user->id})");
-          $stmt = \Pizza\Library\Db::prepare("UPDATE user__passwordreset SET resetted=1 WHERE token=?");
+          $stmt = Db::prepare("UPDATE user__passwordreset SET resetted=1 WHERE token=?");
           $stmt->execute(array($hash));
           return true;
         }
@@ -389,7 +389,7 @@ class User {
     if (!$this->isAdmin() || $this->disabled || !$newDisabled && strpos($newRights, 'A') !== false)
       return true;
     // prüfen, ob die Schule nach der Änderung keinen Admin mehr hat
-    $stmt = \Pizza\Library\Db::prepare("SELECT COUNT(*) FROM user WHERE school=:school AND disabled=0 AND INSTR(rights,'A')>0 AND id<>:id");
+    $stmt = Db::prepare("SELECT COUNT(*) FROM user WHERE school=:school AND disabled=0 AND INSTR(rights,'A')>0 AND id<>:id");
     $stmt->execute(array(":school"=>$this->school, ":id"=>$this->id));
     return $stmt->fetchColumn() > 0;
   }
@@ -402,7 +402,7 @@ class User {
   public function delete()
   {
     Log::info("user '{$this->login}' ({$this->id}) deleted");
-    $stmt = \Pizza\Library\Db::prepare("DELETE FROM user WHERE id=:id");
+    $stmt = Db::prepare("DELETE FROM user WHERE id=:id");
     if ($stmt->execute(array(":id"=>$this->id))) {
       return true;
     }
