@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 31. Mrz 2018 um 17:47
+-- Erstellungszeit: 07. Apr 2018 um 15:40
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.27-0+deb9u1
 
@@ -23,12 +23,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `log`
+--
+
+CREATE TABLE `log` (
+  `time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `user` int(11) DEFAULT NULL,
+  `text` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `orderday`
 --
 
 CREATE TABLE `orderday` (
   `id` int(11) NOT NULL,
-  `day` date NOT NULL
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `organizer` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -41,7 +54,7 @@ CREATE TABLE `ordering` (
   `id` int(11) NOT NULL,
   `day` int(11) NOT NULL,
   `user` int(11) NOT NULL,
-  `orderday` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `comment` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(3,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -92,10 +105,17 @@ CREATE TABLE `user__remember` (
 --
 
 --
+-- Indizes für die Tabelle `log`
+--
+ALTER TABLE `log`
+  ADD KEY `user` (`user`);
+
+--
 -- Indizes für die Tabelle `orderday`
 --
 ALTER TABLE `orderday`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `organizer` (`organizer`);
 
 --
 -- Indizes für die Tabelle `ordering`
@@ -131,10 +151,15 @@ ALTER TABLE `user__remember`
 --
 
 --
+-- AUTO_INCREMENT für Tabelle `orderday`
+--
+ALTER TABLE `orderday`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT für Tabelle `ordering`
 --
 ALTER TABLE `ordering`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT für Tabelle `payment`
 --
@@ -144,16 +169,28 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Constraints der exportierten Tabellen
 --
 
 --
+-- Constraints der Tabelle `log`
+--
+ALTER TABLE `log`
+  ADD CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints der Tabelle `orderday`
+--
+ALTER TABLE `orderday`
+  ADD CONSTRAINT `orderday_ibfk_1` FOREIGN KEY (`organizer`) REFERENCES `user` (`id`) ON DELETE SET NULL;
+
+--
 -- Constraints der Tabelle `ordering`
 --
 ALTER TABLE `ordering`
-  ADD CONSTRAINT `ordering_ibfk_1` FOREIGN KEY (`day`) REFERENCES `orderday` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `ordering_ibfk_1` FOREIGN KEY (`day`) REFERENCES `orderday` (`id`),
   ADD CONSTRAINT `ordering_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
