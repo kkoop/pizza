@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 07. Apr 2018 um 15:40
+-- Erstellungszeit: 15. Apr 2018 um 00:49
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.27-0+deb9u1
 
@@ -41,7 +41,8 @@ CREATE TABLE `log` (
 CREATE TABLE `orderday` (
   `id` int(11) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `organizer` int(11) DEFAULT NULL
+  `organizer` int(11) DEFAULT NULL,
+  `deliveryservice` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pizza Paradies'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -55,7 +56,7 @@ CREATE TABLE `ordering` (
   `day` int(11) NOT NULL,
   `user` int(11) NOT NULL,
   `product` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comment` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comment` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(3,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -68,7 +69,8 @@ CREATE TABLE `ordering` (
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user` int(11) NOT NULL,
+  `fromuser` int(11) NOT NULL,
+  `touser` int(11) NOT NULL,
   `amount` decimal(3,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -130,7 +132,8 @@ ALTER TABLE `ordering`
 --
 ALTER TABLE `payment`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user` (`user`);
+  ADD KEY `touser` (`touser`),
+  ADD KEY `fromuser` (`fromuser`) USING BTREE;
 
 --
 -- Indizes für die Tabelle `user`
@@ -169,7 +172,7 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Constraints der exportierten Tabellen
 --
@@ -197,7 +200,8 @@ ALTER TABLE `ordering`
 -- Constraints der Tabelle `payment`
 --
 ALTER TABLE `payment`
-  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`fromuser`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`touser`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `user__remember`
