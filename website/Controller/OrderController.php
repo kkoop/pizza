@@ -8,4 +8,13 @@ class OrderController extends  Controller
   { 
     
   }
+  
+  public function newAction()
+  {
+    $this->view->setVars(['title' => "Neue Bestellung"]);
+    if (!($day = Model\Orderday::read($_REQUEST['day']))) {
+      $this->view->setError("Fehler beim Lesen des Bestelltags");
+      return;
+    }
+  }
 }

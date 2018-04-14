@@ -5,6 +5,7 @@ class Order {
   public $id;
   public $day;
   private $user;
+  private $userObj;
   public $product;
   public $comment;
   public $price;
@@ -45,6 +46,8 @@ class Order {
   
   public function getUser()
   {
-    return User::read($this->user);
+    if ($this->userObj == null)
+      $this->userObj = User::read($this->user);
+    return $this->userObj;
   }
 }

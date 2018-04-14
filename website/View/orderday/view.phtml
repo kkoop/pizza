@@ -12,12 +12,30 @@
     </div>
     <div class="panel-body">
       <ul class="list-group">
-<?php foreach ($orders as $order) {
-        printf('<li class="list-group-item"><label>%s</label>: %s <i>%s</i></li>',
+<?php 
+      $ownOrder = false;
+      foreach ($orders as $order) {
+        if ($order->getUser()->id == $_SESSION['user']->id) {
+          $ownOrder = true;
+          $editLink = sprintf('<a href="%s/order/edit/?id=%d"><span class="glyphicon glyphicon-pencil"></span></a>',
+            $baseUrl,
+            $order->id);
+        } else {
+          $editLink = '';
+        }
+        printf('<li class="list-group-item"><label>%s</label>: %s <i>%s</i><span class="badge">%.2f €</span>%s</li>',
           htmlspecialchars($order->getUser()->name),
           htmlspecialchars($order->product),
-          !empty($order->comment) ? '('.htmlspecialchars($order->comment).')' : '');
-      } ?>
+          !empty($order->comment) ? '('.htmlspecialchars($order->comment).')' : '',
+          $order->price,
+          $editLink);
+      }
+      if (!$ownOrder) {
+        printf('<li class="list-group-item"><a href="%s/order/new/?day=%d" class="btn btn-primary">Neu</a></li>',
+          $baseUrl,
+          $orderday->id);
+      }
+?>
       </ul>
     </div>
   </div>

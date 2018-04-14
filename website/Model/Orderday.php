@@ -38,7 +38,7 @@ class Orderday {
     return Order::getAllForDay($this->id);
   }
   
-  public function getMyOrdes()
+  public function getMyOrder()
   {
     return Order::getMineForDay($this->id);
   }
