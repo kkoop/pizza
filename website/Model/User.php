@@ -147,7 +147,7 @@ class User {
       "FROM user ".
       "WHERE user.id=:id");
     $stmt->execute(array(":id"=>$id));
-    $stmt->setFetchMode(\PDO::FETCH_CLASS, "User");
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, get_class());
     if ($user = $stmt->fetch(\PDO::FETCH_CLASS)) {
       $user->init();
       return $user;

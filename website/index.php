@@ -15,6 +15,7 @@ spl_autoload_register(function($className) {
   }
 });
 
+setlocale(LC_ALL, "de_DE.utf8");
 //set_exception_handler('Log::exceptionHandler');
 session_start();
 //bindtextdomain("messages", "./l10n");

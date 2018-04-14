@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Bestellungen <?=strftime("%x %X", $orderday->time)?></h3>
+      <div class="row">
+        <label class="col-sm-2 col-xs-4 control-label">Organisator:</label>
+        <div class="col-sm-4 col-xs-8"><?=htmlspecialchars($orderday->getOrganizer()->name)?></div>
+        <div class="clearfix visible-xs-block"></div>
+        <label class="col-sm-2 col-xs-4 control-label">Lieferdienst:</label>
+        <div class="col-sm-4 col-xs-8"><?=htmlspecialchars($orderday->deliveryservice)?></div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <ul class="list-group">
+<?php foreach ($orders as $order) {
+        printf('<li class="list-group-item"><label>%s</label>: %s <i>%s</i></li>',
+          htmlspecialchars($order->getUser()->name),
+          htmlspecialchars($order->product),
+          !empty($order->comment) ? '('.htmlspecialchars($order->comment).')' : '');
+      } ?>
+      </ul>
+    </div>
+  </div>
+  
+</div>

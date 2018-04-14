@@ -8,7 +8,7 @@ class IndexController extends Controller
   public function indexAction()
   {
     if ($this->isLoggedIn()) {
-      header('Location:'.$GLOBALS['baseUrl'].'/order');
+      header('Location:'.$GLOBALS['baseUrl'].'/orderday');
     } else {
       header('Location:'.$GLOBALS['baseUrl'].'/index/login');
     }
