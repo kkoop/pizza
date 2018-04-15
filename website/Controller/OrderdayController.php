@@ -14,9 +14,16 @@ class OrderdayController extends Controller
   public function viewAction()
   {
     $this->view->setVars(['title' => "Bestellungen"]);
-    if (!($day = Model\Orderday::read($_REQUEST['id']))) {
-      $this->view->setError("Fehler beim Lesen des Bestelltages");
-      return;
+    if (isset($_POST['time'])) {
+      if (($day = Model\Orderday::create($_POST['time'], $_POST['deliveryService'])) == null) {
+        $this->view->setError("Fehler beim Anlegen des Bestelltages");
+        return;
+      }
+    } else {
+      if (!($day = Model\Orderday::read($_REQUEST['id']))) {
+        $this->view->setError("Fehler beim Lesen des Bestelltages");
+        return;
+      }
     }
     $this->view->setVars(['orderday' => $day,
                           'ownOrder' => $day->getMyOrder(),

@@ -70,7 +70,7 @@ try {
   include('error_pages/404.php');
 } catch (\Pizza\Library\NeedsLoginException $e) {
   $_SESSION['redirect'] = "/$url";
-  header('Location: /index/login');
+  header("Location: $baseUrl/index/login");
 } catch (\Exception $e) {
   http_response_code(500);
   echo 'Exception: '.$e->getMessage().' '.$e->getTraceAsString();

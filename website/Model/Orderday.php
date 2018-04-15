@@ -32,6 +32,15 @@ class Orderday {
     $stmt->execute($params);
     return $stmt->fetchAll(\PDO::FETCH_CLASS, get_class());
   }
+  
+  public static function create($time, $service)
+  {
+    $stmt = Db::prepare("INSERT INTO orderday (time,organizer,deliveryservice) VALUES (:time,:user,:service)");
+    if ($stmt->execute(['time' => $time, ':user' => $_SESSION['user']->id, ':service' => $service])) {
+      return self::read(Db::lastInsertId());
+    }
+    return null;
+  }
 
   public function getOrders()
   {

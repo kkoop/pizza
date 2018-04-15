@@ -1,13 +1,30 @@
 <div class="container">
   <h1>Neuer Bestelltag</h1>
-  <form class="form-horizontal" action="." method="post">
-    <div class="row">
+  <form class="form-horizontal" action="<?=$baseUrl?>/orderday/view" method="post">
+    <div class="form-group row">
       <label class="col-sm-2 control-label">Bestellzeit</label>
-      <div class="col-sm-4"><input type="datetime-local" class="form-control" name="time"></div>
+<!--      <div class="col-sm-4"><input type="datetime-local" class="form-control" name="time"></div>-->
+      <div class="col-sm-4"><input type="text" id="inputTime" class="form-control" name="time" required></div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-2 control-label">Lieferdienst</label>
+      <div class="col-sm-4"><input type="text" class="form-control" name="deliveryService" required></div>
     </div>
     <div class="row">
-      <label class="col-sm-2 control-label">Kommentar</label>
-      <div class="col-sm-4"><input type="text" class="form-control" name="comment"></div>
+      <div class="col-sm-4 col-sm-offset-2"><button type="submit" class="btn btn-primary">Anlegen</button></div>
     </div>
   </form>
 </div>
+
+<script>
+moment.locale('de_DE.utf8');
+$("#inputTime").datetimepicker({
+  locale: 'de',
+  format: 'L LT',
+  minDate: moment()
+});
+$(function() { $("#inputTime").data("DateTimePicker").date(moment().hours(11).minutes(30)); });
+$("form").submit(function(e) {
+  $("#inputTime").data("DateTimePicker").format('YYYY-MM-DD HH:MM');
+});
+</script>
