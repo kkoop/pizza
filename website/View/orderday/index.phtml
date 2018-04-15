@@ -4,7 +4,9 @@
   <ul class="list-group">
 <?php foreach ($openOrderDays as $order) : ?>
     <li class="list-group-item">
-      <a href="<?=$baseUrl?>/orderday/view/?id=<?=$order->id?>"><?= strftime("%x %X", $order->time) ?></a> 
+      <a href="<?=$baseUrl?>/orderday/view/?id=<?=$order->id?>">
+        <?= strftime("%x %X", $order->time) ?> - <?= $order->deliveryservice ?>
+      </a> 
       <span class="badge"><?=$order->orderCount?></span>
     </li>
 <?php endforeach; ?>

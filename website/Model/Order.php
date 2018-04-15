@@ -10,6 +10,14 @@ class Order {
   public $comment;
   public $price;
   
+  public static function read($id)
+  {
+    $stmt = Db::prepare("SELECT * FROM ordering WHERE id=:id");
+    $stmt->execute([":id" => $id]);
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, get_class());
+    return $stmt->fetch(\PDO::FETCH_CLASS);
+  }
+  
   public static function getAllForDay($dayId)
   {
     $stmt = Db::prepare("SELECT * FROM ordering WHERE day=:day");
@@ -49,5 +57,10 @@ class Order {
     if ($this->userObj == null)
       $this->userObj = User::read($this->user);
     return $this->userObj;
+  }
+  
+  public function getDay()
+  {
+    return Orderday::read($this->day);
   }
 }
