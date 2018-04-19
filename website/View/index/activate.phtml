@@ -1,0 +1,35 @@
+<style>
+.login {
+  background:white;
+  padding:25px 40px 25px 40px;
+  margin-top:15px;
+  box-shadow:0 0 10px grey;
+  max-width: 330px;
+  margin: 0 auto;
+}
+.login .form-control {
+  margin-bottom:12px;
+}
+</style>
+
+<?php
+if (isset($successMessage)) {
+  printf('<div class="form-signin">%s</div>', $successMessage);
+  echo('<script>setTimeout(function(){ window.location="'.$baseUrl.'"; }, 1000);</script>');
+  return;
+} elseif (isset($errorMessage)) {
+  printf('<div class="alert alert-danger">%s</div>', $errorMessage);
+}
+?>
+
+<form class="login" action="<?=$baseUrl?>/index/activate" method="post">
+  <input type="hidden" name="token" value="<?=htmlspecialchars($token)?>">
+  <h3><?=_("Zugang aktivieren")?></h3>
+  <p><?=sprintf(_("Sie können nun Ihren Zugang zu %s aktivieren. Erstellen Sie dazu ein neues Passwort."),
+                K_PRODUCT_NAME)?></p>
+  <input type="email" id="inputAccount" name="account" class="form-control" readonly value="<?=htmlspecialchars($login)?>">
+  <label for="inputPassword" class="sr-only"><?=_("Passwort")?></label>
+  <input type="password" id="inputPassword" name="password" class="form-control" placeholder="<?=_("Passwort")?>" required autofocus minlength="<?=K_MIN_PASSWORD_LEN?>">
+  <input type="password" id="inputPassword2" name="password2" class="form-control" placeholder="<?=_("Passwort bestätigen")?>" required>
+  <button class="btn btn-primary btn-block" type="submit"><?=_("Anmelden")?></button>
+</form>

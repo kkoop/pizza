@@ -13,14 +13,14 @@
 </style>
 
 <?php
-  if (isset($successMessage)) {
-    printf('<div class="alert alert-success">%s</div>', $successMessage);
-    // Rest der Seite nicht mehr anzeigen
-    echo("</div>");
-    return;
-  } else if (!empty($errorMessage)) {
-    printf('<div class="alert alert-danger">%s</div>', $errorMessage);
-  }
+if (isset($successMessage)) {
+  printf('<div class="alert alert-success">%s</div>', $successMessage);
+  // Rest der Seite nicht mehr anzeigen
+  echo("</div>");
+  return;
+} else if (!empty($errorMessage)) {
+  printf('<div class="alert alert-danger">%s</div>', $errorMessage);
+}
 ?>
 <form class="login collapse in" id="frmLogin" action="<?=$baseUrl?>/index/login" method="post">
   <h1>Anmelden</h1>
@@ -31,8 +31,18 @@
   <h3>Noch keinen Zugang?</h3>
   <a href="#" data-toggle="collapse" data-target="#frmLogin,#frmRegister">Hier registrieren</a>.
 </form>
-<form class="login collapse" id="frmRegister" action="." method="post">
+<form class="login collapse" id="frmRegister" action="<?=$baseUrl?>/index/login" method="post">
   <h1>Registrieren</h1>
-  <input type="email" class="form-control" placeholder="E-Mail" name="login">
+  <input type="text" class="form-control" placeholder="Name" name="regName" required>
+  <input type="email" class="form-control" placeholder="E-Mail" name="regEmail" required>
   <button type="submit" class="btn btn-primary form-control">Registrieren</button>
 </form>
+
+<script>
+$("#frmRegister").on("shown.bs.collapse", function(e) {
+  $("input[name='regName']").focus();
+});
+<?php if (!empty($showRegForm)) : ?>
+$(function() {$("#frmRegister,#frmLogin").collapse("toggle"); });
+<?php endif; ?>
+</script>

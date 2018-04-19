@@ -1,5 +1,6 @@
 <?php
 namespace Pizza\Controller;
+use Pizza\Model;
 
 class IndexController extends Controller
 {
@@ -18,14 +19,14 @@ class IndexController extends Controller
   public function loginAction()
   {
     if ($this->isLoggedIn()) {
-      header('Location:'.$GLOBALS['baseUrl'].'/bestellung');
+      header('Location:'.$GLOBALS['baseUrl'].'/orderday');
       exit(0);
     }
     $this->view->setVars(['title' => "Login"]);
 
     if (isset($_POST['account'])) {
       usleep(400000);
-      if ($user = \Pizza\Model\User::login($_POST['account'], $_POST['password'], $_SERVER['REMOTE_ADDR'])) {
+      if ($user = Model\User::login($_POST['account'], $_POST['password'], $_SERVER['REMOTE_ADDR'])) {
         // Login hat funktioniert, zur Startseite weiterleiten
         $_SESSION['user'] = $user;
         if (isset($_POST['rememberme'])) {
@@ -48,21 +49,12 @@ class IndexController extends Controller
     }
     if (isset($_POST['regEmail'])) {
       // Registrier-Formular wurde gesendet
-      require_once(__DIR__.'/../model/registration.php');
-      if (!\Registration::checkKdnr($_POST['regKdnr'], $_POST['regPlz'])) {
-        $this->view->setVars([
-          'showRegForm'  => true,
-          'errorMessage' => _("Die eingegebene Kundennummer ist nicht gültig oder passt nicht zur angegebenen Postleitzahl.")]);
-      } else if (\Registration::kdnrRegistered($_POST['regKdnr'])) {
-        $this->view->setVars([
-          'showRegForm'  => true,
-          'errorMessage' => _("Diese Kundennummer ist bereits registriert.")]);
-      } else if (\Registration::emailRegistered($_POST['regEmail'])) {
+      if (Model\User::loginExists($_POST['regEmail'])) {
         $this->view->setVars([
           'showRegForm'  => true,
           'errorMessage' => _("Diese E-Mail-Adresse ist bereits registriert.")]);
       } else {
-        if (\Registration::register($_POST['regName'], $_POST['regEmail'], $_POST['regInstitut'], $_POST['regKdnr'], $_POST['regPlz'])) {
+        if (Model\User::newUser($_POST['regEmail'], $_POST['regName'], "RW")) {
           $this->view->setVars([
             'successMessage' => _("Registrierung wurde entgegengenommen. Sie erhalten in Kürze eine E-Mail mit allen weiteren Informationen.")]);
         } else {
@@ -111,7 +103,7 @@ class IndexController extends Controller
           "token" => $_REQUEST['token'],
           "errorMessage" => sprintf(_("Passwort ist zu kurz. Geben Sie mindestens %d Zeichen ein."), K_MIN_PASSWORD_LEN)]);
       } else {
-        if (\Pizza\Model\User::passwordReset($_REQUEST['token'], $_POST['password'])) {
+        if (Model\User::passwordReset($_REQUEST['token'], $_POST['password'])) {
           $this->view->setVars(["step" => 4]);
         } else {
           $this->view->setError(_("Beim Ändern des Passworts ist ein Fehler aufgetreten."));
@@ -119,7 +111,7 @@ class IndexController extends Controller
       }
     } elseif (isset($_REQUEST['token'])) {
       // Schritt 3: E-Mail-Link wurde aufgerufen
-      if (\Pizza\Model\User::validResetToken($_REQUEST['token'])) {
+      if (Model\User::validResetToken($_REQUEST['token'])) {
         $this->view->setVars(["step" => 3, "token" => $_REQUEST['token']]);
       } else {
         $this->view->setError(_("Ungültiger Link."));
@@ -131,7 +123,7 @@ class IndexController extends Controller
         "Um Ihr Passwort zurückzusetzen, folgen Sie diesem Link: \n%s\n\n".
         "Mit freundlichen Grüßen\nIhre LD DIDACTIC GmbH\n\nDies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\n"),
         "https://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME'])."/index/resetPassword?token=%s");
-      \Pizza\Model\User::passwordResetEmail($_POST['email'], $_SERVER['REMOTE_ADDR'], $subject, $text);
+      Model\User::passwordResetEmail($_POST['email'], $_SERVER['REMOTE_ADDR'], $subject, $text);
       // immer positive Rückmeldung, egal ob E-Mail wirklich geschickt wird, damit niemand E-Mails auf 
       // existierende Accounts abfragen kann
       sleep(1);
@@ -145,12 +137,12 @@ class IndexController extends Controller
   public function activateAction()
   {
     $this->view->setVars(['title' => "Benutzer aktivieren"]);
-    if (!isset($_REQUEST['token']) || ($user = \Pizza\Model\User::fromToken($_REQUEST['token'])) == NULL) {
+    if (!isset($_REQUEST['token']) || ($user = Model\User::fromToken($_REQUEST['token'])) == NULL) {
       $this->view->setError(_("Ungültiger Link."));
       return;
     }
-    $this->view->setVars(["token" => $_REQUEST['token'],"login" => $user->login]);
-    if (isset($_REQUEST['AGB']) && isset($_REQUEST['privacy']) && strlen($_REQUEST['password'])) {
+    $this->view->setVars(["token" => $_REQUEST['token'], "login" => $user->login]);
+    if (!empty($_REQUEST['password'])) {
       // Schritt 2: Passwort wurde eingegeben, Zugang kann aktiviert werden
       if ($_POST['password'] != $_POST['password2']) {
         $this->view->setVars(["errorMessage" => _("Passwörter stimmen nicht überein.")]);

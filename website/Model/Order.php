@@ -1,7 +1,8 @@
 <?php
 namespace Pizza\Model;
 
-class Order {
+class Order 
+{
   public $id;
   public $day;
   private $user;

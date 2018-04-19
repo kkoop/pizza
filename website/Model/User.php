@@ -5,7 +5,8 @@ namespace Pizza\Model;
  * @brief Ein Benutzer, der sich anmelden kann
  * 
  */
-class User {
+class User 
+{
   public $id;
   public $login;
   public $rights;
@@ -170,7 +171,7 @@ class User {
       "FROM user ".
       "WHERE user.token=:token");
     $stmt->execute(array(":token"=>hash("sha256", $token)));
-    $stmt->setFetchMode(\PDO::FETCH_CLASS, "User");
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, "Pizza\Model\User");
     if ($user = $stmt->fetch(\PDO::FETCH_CLASS)) {
       $user->init();
       return $user;
@@ -247,10 +248,9 @@ class User {
   /**
    * @brief Legt einen neuen Benutzer an
    * 
-   * Die Sprache des neuen Benutzers wird auf die Sprache des aktuellen Benutzers gesetzt.
    * @return bool
    */
-  public static function newUser($login, $name, $rights, $mailSubject, $mailText)
+  public static function newUser($login, $name, $rights)
   {
     $token = bin2hex(random_bytes(32));
     $hash = hash("sha256", $token);
@@ -260,7 +260,18 @@ class User {
                              ":token"    => $hash,
                              ":rights"   => $rights))) {
       Log::info("user '$login' (".Db::lastInsertId().") created");
-      Mailer::mail($login, $mailSubject, sprintf($mailText, $token));
+      $url = "/";
+      if (isset($_SERVER['SERVER_NAME'])) {
+        $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
+      }
+      $mailSubject = sprintf(_("Neuer Zugang zu %s"), K_PRODUCT_NAME);
+      $mailText = sprintf(_("Hallo,\r\nSie (oder jemand anders) hat gerade einen Zugang zu %s registriert. ".
+          "Um ihn zu aktivieren, folgen Sie diesem Link:\r\n%s%s\r\n".
+          "Dies ist eine automatisch generierte Mail. Antworten werden nicht zugestellt.\r\n"),
+        K_PRODUCT_NAME,
+        "$url/index/activate/?token=",
+        $token);
+      \Pizza\Library\Mailer::mail($login, $mailSubject, $mailText);
       return true;
     }
     return false;

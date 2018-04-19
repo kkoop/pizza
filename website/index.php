@@ -3,6 +3,7 @@
  * @brief Einstiegspunkt für alle Webseiten
  */
 namespace Pizza;
+require_once('config.php');
 $baseUrl = "/~koop/pizza";
 
 // Autoload für Controller-Klassen registrieren

@@ -1,7 +1,8 @@
 <?php
 namespace Pizza\Model;
 
-class Payment {
+class Payment 
+{
   public $id;
   public $time;
   public $user;
