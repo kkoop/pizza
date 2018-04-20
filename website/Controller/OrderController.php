@@ -26,7 +26,7 @@ class OrderController extends  Controller
         $order->comment = $_POST['comment'];
         $order->price   = $_POST['price'];
         $order->update();
-        header("Location: {$GLOBALS['baseUrl']}/orderday/view/?id={$order->day}");
+        header("Location: ".K_BASE_URL."/orderday/view/?id={$order->day}");
         exit(0);
       } else {
         // neuer Eintrag
@@ -35,7 +35,7 @@ class OrderController extends  Controller
           return;
         }
         Model\Order::create($day->id, $_POST['product'], $_POST['comment'], $_POST['price']);
-        header("Location: {$GLOBALS['baseUrl']}/orderday/view/?id={$day->id}");
+        header("Location: ".K_BASE_URL."/orderday/view/?id={$day->id}");
         exit(0);
       }
     }

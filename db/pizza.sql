@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 15. Apr 2018 um 00:49
+-- Erstellungszeit: 15. Apr 2018 um 22:18
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.27-0+deb9u1
 
@@ -157,12 +157,12 @@ ALTER TABLE `user__remember`
 -- AUTO_INCREMENT für Tabelle `orderday`
 --
 ALTER TABLE `orderday`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `ordering`
 --
 ALTER TABLE `ordering`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `payment`
 --
@@ -172,7 +172,7 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints der exportierten Tabellen
 --

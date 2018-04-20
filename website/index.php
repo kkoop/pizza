@@ -4,7 +4,6 @@
  */
 namespace Pizza;
 require_once('config.php');
-$baseUrl = "/~koop/pizza";
 
 // Autoload für Controller-Klassen registrieren
 spl_autoload_register(function($className) {
@@ -71,7 +70,7 @@ try {
   include('error_pages/404.php');
 } catch (\Pizza\Library\NeedsLoginException $e) {
   $_SESSION['redirect'] = "/$url";
-  header("Location: $baseUrl/index/login");
+  header("Location: ".K_BASE_URL."/index/login");
 } catch (\Exception $e) {
   http_response_code(500);
   echo 'Exception: '.$e->getMessage().' '.$e->getTraceAsString();

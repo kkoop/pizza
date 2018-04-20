@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title><?= K_PRODUCT_NAME ?> - <?= $title ?></title>
 
-    <link href="<?=$baseUrl?>/css/style.css" rel="stylesheet">
+    <link href="<?=K_BASE_URL?>/css/style.css" rel="stylesheet">
     <script src="/javascript/jquery/jquery.min.js"></script>
     <script src="/javascript/jquery-ui/jquery-ui.min.js"></script>
 <!--    <link href="/javascript/jquery-ui/css/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css">
@@ -20,7 +20,7 @@
     <script src="/js/bootstrap-multiselect.min.js"></script> -->
 
 <!--    <script src="/js/tools.js"></script> -->
-    <link rel="icon" href="<?=$baseUrl?>/img/favicon.png" type="image/png">
+    <link rel="icon" href="<?=K_BASE_URL?>/img/favicon.png" type="image/png">
 <!--    <link rel="icon" href="/img/Logo192.png" sizes="192x192"> -->
   </head>
 
@@ -28,8 +28,8 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="<?=$baseUrl?>">
-            <img src="<?=$baseUrl?>/img/Logo.svg" onerror="this.onerror=null; this.src='<?=$baseUrl?>/img/Logo.png'" alt="logo">
+          <a class="navbar-brand" href="<?=K_BASE_URL?>">
+            <img src="<?=K_BASE_URL?>/img/Logo.svg" onerror="this.onerror=null; this.src='<?=K_BASE_URL?>/img/Logo.png'" alt="logo">
           </a>
         </div>
       </div>
@@ -39,10 +39,10 @@
 ?>
     <footer class="footer">
       <a class="footer-brand pull-left" href="//ld-didactic.de">
-        <img src="<?=$baseUrl?>/img/LeyboldDidactic.svg">
+        <img src="<?=K_BASE_URL?>/img/LeyboldDidactic.svg">
       </a>
-      <a href="<?=$baseUrl?>/index/privacy"><?=_("Datenschutz")?></a> |
-      <a href="<?=$baseUrl?>/index/imprint"><?=_("Impressum")?></a>
+      <a href="<?=K_BASE_URL?>/index/privacy"><?=_("Datenschutz")?></a> |
+      <a href="<?=K_BASE_URL?>/index/imprint"><?=_("Impressum")?></a>
     </footer>
   </body>
 </html>

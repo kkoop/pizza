@@ -18,7 +18,7 @@
         if ($order->getUser()->id == $_SESSION['user']->id) {
           $ownOrder = true;
           $editLink = sprintf('<a href="%s/order/edit/?id=%d"><span class="glyphicon glyphicon-pencil"></span></a>',
-            $baseUrl,
+            K_BASE_URL,
             $order->id);
         } else {
           $editLink = '';
@@ -32,7 +32,7 @@
       }
       if (!$ownOrder) {
         printf('<li class="list-group-item"><a href="%s/order/edit/?day=%d" class="btn btn-primary">Bestellung hinzufügen</a></li>',
-          $baseUrl,
+          K_BASE_URL,
           $orderday->id);
       }
 ?>

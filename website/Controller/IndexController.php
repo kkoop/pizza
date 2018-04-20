@@ -9,9 +9,9 @@ class IndexController extends Controller
   public function indexAction()
   {
     if ($this->isLoggedIn()) {
-      header('Location:'.$GLOBALS['baseUrl'].'/orderday');
+      header('Location:'.K_BASE_URL.'/orderday');
     } else {
-      header('Location:'.$GLOBALS['baseUrl'].'/index/login');
+      header('Location:'.K_BASE_URL.'/index/login');
     }
     exit(0);
   }
@@ -19,7 +19,7 @@ class IndexController extends Controller
   public function loginAction()
   {
     if ($this->isLoggedIn()) {
-      header('Location:'.$GLOBALS['baseUrl'].'/orderday');
+      header('Location:'.K_BASE_URL.'/orderday');
       exit(0);
     }
     $this->view->setVars(['title' => "Login"]);
@@ -39,7 +39,7 @@ class IndexController extends Controller
         } else {
           $redirect = "/";
         }
-        header("Location:{$GLOBALS['baseUrl']}$redirect");
+        header("Location:".K_BASE_URL.$redirect);
         exit(0);
       } else {
         // falscher Benutzername/Passwort

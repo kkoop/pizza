@@ -36,7 +36,6 @@ class View
     // zur einfachen Handhabung View-Variablen als globale Variablen mit dem Namen des Keys erzeugen
     foreach($this->vars as $key => $val)
       $$key = $val;
-    $baseUrl = $GLOBALS['baseUrl'];
     $menu = $menu ?? '';
     $subMenu = $subMenu ?? '';
     $title = $title ?? '';

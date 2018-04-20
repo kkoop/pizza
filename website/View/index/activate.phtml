@@ -15,14 +15,14 @@
 <?php
 if (isset($successMessage)) {
   printf('<div class="form-signin">%s</div>', $successMessage);
-  echo('<script>setTimeout(function(){ window.location="'.$baseUrl.'"; }, 1000);</script>');
+  echo('<script>setTimeout(function(){ window.location="'.K_BASE_URL.'"; }, 1000);</script>');
   return;
 } elseif (isset($errorMessage)) {
   printf('<div class="alert alert-danger">%s</div>', $errorMessage);
 }
 ?>
 
-<form class="login" action="<?=$baseUrl?>/index/activate" method="post">
+<form class="login" action="<?=K_BASE_URL?>/index/activate" method="post">
   <input type="hidden" name="token" value="<?=htmlspecialchars($token)?>">
   <h3><?=_("Zugang aktivieren")?></h3>
   <p><?=sprintf(_("Sie können nun Ihren Zugang zu %s aktivieren. Erstellen Sie dazu ein neues Passwort."),
