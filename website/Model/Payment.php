@@ -25,4 +25,10 @@ class Payment
                     ":user2" => $_SESSION['user']->id]);
     return $stmt->fetchAll(\PDO::FETCH_CLASS, get_class());
   }
+  
+  static function received($fromUser, $amount)
+  {
+    $stmt = Db::prepare("INSERT INTO payment (fromuser,touser,amount) VALUES (:from,:to,:amount)");
+    return $stmt->execute([':from' => $fromUser, ':to' => $_SESSION['user']->id, ':amount' => $amount]);
+  }
 }

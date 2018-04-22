@@ -18,6 +18,18 @@ class PaymentController extends  Controller
   public function editAction()
   {
     $this->view->setVars(['title' => "Zahlungen"]);
-    
+    if (isset($_POST['amount'])) {
+      if (Model\Payment::received($_POST['user'], $_POST['amount'])) {
+        $this->view->setVars(['successMessage' => "Zahlung gespeichert."]);
+      } else {
+        $this->view->setError("Fehler beim Speichern der Zahlung");
+      }
+    } else {
+      $users = Model\User::readAll();
+      $users = array_filter($users, function($item) {
+        return $item->id != $_SESSION['user']->id;
+      });
+      $this->view->setVars(['users' => $users]);
+    }
   }
 }
