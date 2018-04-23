@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 15. Apr 2018 um 22:18
+-- Erstellungszeit: 23. Apr 2018 um 22:32
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.27-0+deb9u1
 
@@ -93,6 +93,20 @@ CREATE TABLE `user` (
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `user__passwordreset`
+--
+
+CREATE TABLE `user__passwordreset` (
+  `user` int(11) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `token` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `IP` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `resetted` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `user__remember`
 --
 
@@ -141,6 +155,13 @@ ALTER TABLE `payment`
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `login` (`login`);
+
+--
+-- Indizes für die Tabelle `user__passwordreset`
+--
+ALTER TABLE `user__passwordreset`
+  ADD PRIMARY KEY (`token`) USING BTREE,
+  ADD KEY `user` (`user`);
 
 --
 -- Indizes für die Tabelle `user__remember`
