@@ -64,4 +64,16 @@ class Order
   {
     return Orderday::read($this->day);
   }
+  
+  public static function getOwedPerUser()
+  {
+    $stmt = Db::prepare("SELECT user.id AS user,user.name AS name,SUM(price) AS amount ".
+      "FROM ordering ".
+      "JOIN user ON user.id=ordering.user ".
+      "JOIN orderday ON orderday.id=ordering.day ".
+      "WHERE orderday.organizer=:user AND ordering.user!=:user2 ".
+      "GROUP BY ordering.user");
+    $stmt->execute([":user" => $_SESSION['user']->id, ":user2" => $_SESSION['user']->id]);
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+  }
 }

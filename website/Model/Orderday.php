@@ -21,7 +21,7 @@ class Orderday
   
   public static function readAll($startDate, $endDate=null)
   {
-    $stmt = Db::prepare("SELECT orderday.id,UNIX_TIMESTAMP(time) AS time,organizer,deliveryservice,COUNT(ordering.id) AS orderCount ".
+    $stmt = Db::prepare("SELECT orderday.id,UNIX_TIMESTAMP(time) AS time,organizer,deliveryservice,COUNT(ordering.id) AS orderCount,SUM(price) AS amount ".
       "FROM orderday ".
       "LEFT JOIN ordering ON ordering.day=orderday.id ".
       "WHERE time>=FROM_UNIXTIME(:startdate) ".
