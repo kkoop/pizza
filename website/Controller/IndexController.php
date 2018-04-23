@@ -44,7 +44,7 @@ class IndexController extends Controller
       } else {
         // falscher Benutzername/Passwort
         $this->view->setVars(['errorMessage' => _("Fehler beim Anmelden, ungültiger Benutzer oder falsches Passwort.").
-          '<br><a href="/index/resetPassword">'._("Passwort vergessen").'?</a>']);
+          '<br><a href="'.K_BASE_URL.'/index/resetPassword">'._("Passwort vergessen").'?</a>']);
       }
     }
     if (isset($_POST['regEmail'])) {
@@ -122,7 +122,7 @@ class IndexController extends Controller
       $text = sprintf(_("Guten Tag,\n\nSie haben vor Kurzem ein neues Passwort beantragt. Falls diese Anfrage nicht von Ihnen kam, ignorieren Sie diese E-Mail.\n".
         "Um Ihr Passwort zurückzusetzen, folgen Sie diesem Link: \n%s\n\n".
         "Mit freundlichen Grüßen\nIhre LD DIDACTIC GmbH\n\nDies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\n"),
-        "https://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME'])."/index/resetPassword?token=%s");
+        "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME'])."/index/resetPassword?token=%s");
       Model\User::passwordResetEmail($_POST['email'], $_SERVER['REMOTE_ADDR'], $subject, $text);
       // immer positive Rückmeldung, egal ob E-Mail wirklich geschickt wird, damit niemand E-Mails auf 
       // existierende Accounts abfragen kann

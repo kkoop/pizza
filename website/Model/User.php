@@ -343,7 +343,7 @@ class User
     // Token generieren, E-Mail verschicken
     $token = bin2hex(random_bytes(32));
     $hash = hash("sha256", $token);
-    Mailer::mail($email, $mailSubject, sprintf($mailText, $token));
+    \Pizza\Library\Mailer::mail($email, $mailSubject, sprintf($mailText, $token));
     $stmt = Db::prepare("INSERT INTO user__passwordreset (user,token,ip) SELECT id,:token,:ip FROM user WHERE login=:email");
     return $stmt->execute(array(":email"=>$email, ":token"=>$hash, ":ip"=>$ip));
   }
