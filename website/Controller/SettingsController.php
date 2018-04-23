@@ -2,9 +2,10 @@
 namespace Pizza\Controller;
 use Pizza\Model;
 
-class AccountController extends Controller
+class SettingsController extends Controller
 {
   public function indexAction()
   {
   }
 }
+
