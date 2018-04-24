@@ -15,9 +15,17 @@ class PaymentController extends  Controller
     usort($transactions, function($a, $b) {
       return $a->time-$b->time;
     });
+    $balance = 0.0;
+    foreach ($transactions as $transaction) {
+      if (get_class($transaction) == "Pizza\Model\Payment" && $transaction->toId == $_SESSION['user']->id)
+        $balance += $transaction->amount;
+      else 
+        $balance -= $transaction->amount;
+    }
     $this->view->setVars(['startDate'    => strftime("%x", $startTime),
                           'endDate'      => strftime("%x", $endTime),
-                          'transactions' => $transactions]);
+                          'transactions' => $transactions,
+                          'balance'      => $balance]);
                           
   }
   
@@ -53,7 +61,6 @@ class PaymentController extends  Controller
           }
         }
       }
-      var_dump($debts);
       $this->view->setVars(['users' => $users, 
                             'debts' => $debts]);
     }

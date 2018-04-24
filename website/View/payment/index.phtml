@@ -1,9 +1,3 @@
-<style>
-td.negative {
-  color: red;
-}
-</style>
-
 <div class="container">
 
   <div class="panel panel-default">
@@ -17,18 +11,19 @@ td.negative {
     
     <div class="panel-body">
       <table class="table table-striped">
-        <tr><th>Datum</th><th>Von</th><th>An</th><th>Betrag</th></tr>
+        <thead><tr><th>Datum</th><th>Von</th><th>An</th><th class="currency">Betrag</th></tr></thead>
+        <tbody>
 <?php   
         foreach ($transactions as $transaction) {
           if (get_class($transaction) == "Pizza\Model\Payment") {
-            printf('<tr><td>%s</td><td>%s</td><td>%s</td><td class="%s">%s €</td></tr>',
+            printf('<tr><td>%s</td><td>%s</td><td>%s</td><td class="currency %s">%.2f €</td></tr>',
               strftime("%x", $transaction->time),
               htmlspecialchars($transaction->fromName),
               htmlspecialchars($transaction->toName),
               $transaction->toId == $_SESSION['user']->id ? "positive" : "negative",
               $transaction->amount);
           } else {
-            printf('<tr><td>%s</td><td>%s</td><td>%s</td><td class="%s">%s €</td></tr>',
+            printf('<tr><td>%s</td><td>%s</td><td>%s</td><td class="currency %s">%.2f €</td></tr>',
               strftime("%x", $transaction->time),
               htmlspecialchars($_SESSION['user']->name),
               htmlspecialchars($transaction->deliveryservice),
@@ -37,6 +32,10 @@ td.negative {
           }
         }
 ?>
+      </tbody>
+      <tfooter>
+        <tr><td colspan="3"></td><td class="currency <?=$balance < 0 ? "negative" : ""?>"><?=sprintf("%.2f €", $balance)?></td></tr>
+      </tfooter>
       </table>
       <a href="<?=K_BASE_URL?>/payment/add" class="btn btn-primary">Erhaltene Zahlungen eintragen</a>
     </div>
