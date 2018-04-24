@@ -1,4 +1,5 @@
 [Project]
+CreatedFrom=Makefile
+Manager=KDevCustomMakeManager
 Name=pizza
-Manager=KDevGenericManager
 VersionControl=
