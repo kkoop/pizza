@@ -15,7 +15,7 @@
 <?php 
       $ownOrder = false;
       foreach ($orders as $order) {
-        if ($order->getUser()->id == $_SESSION['user']->id) {
+        if ($order->getUser()->id == $_SESSION['user']->id && $orderday->time > time()) {
           $ownOrder = true;
           $editLink = sprintf('<a href="%s/order/edit/?id=%d"><span class="glyphicon glyphicon-pencil"></span></a>',
             K_BASE_URL,
@@ -30,7 +30,7 @@
           $order->price,
           $editLink);
       }
-      if (!$ownOrder) {
+      if (!$ownOrder && $orderday->time > time()) {
         printf('<li class="list-group-item"><a href="%s/order/edit/?day=%d" class="btn btn-primary">Bestellung hinzufügen</a></li>',
           K_BASE_URL,
           $orderday->id);

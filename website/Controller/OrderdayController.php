@@ -26,7 +26,6 @@ class OrderdayController extends Controller
       }
     }
     $this->view->setVars(['orderday' => $day,
-                          'ownOrder' => $day->getMyOrder(),
                           'orders'   => $day->getOrders()]);
   }
   

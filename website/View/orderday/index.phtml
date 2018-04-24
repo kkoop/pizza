@@ -5,12 +5,14 @@
 <?php foreach ($openOrderDays as $order) : ?>
     <li class="list-group-item">
       <a href="<?=K_BASE_URL?>/orderday/view/?id=<?=$order->id?>">
-        <?= strftime("%x %X", $order->time) ?> - <?= $order->deliveryservice ?>
+        <?= strftime("%x %X", $order->time) ?> - <?= htmlspecialchars($order->deliveryservice) ?>
       </a> 
       <span class="badge"><?=$order->orderCount?></span>
     </li>
 <?php endforeach; ?>
-    <li class="list-group-item"><a href="<?=K_BASE_URL?>/orderday/new" class="btn btn-primary">Neu</button></a>
+    <li class="list-group-item">
+      <a id="lnkNewOrderday" href="<?=K_BASE_URL?>/orderday/new" class="btn btn-primary">Neue gemeinsame Bestellung</a>
+    </li>
   </ul>
 
 <?php if (!empty($pastOrderDays)): ?>
@@ -26,3 +28,11 @@
 <?php endif; ?>
   
 </div>
+
+<?php if (count($openOrderDays)): ?>
+<script>
+$("#lnkNewOrderday").click(function(e) {
+  return confirm("Es gibt schon eine offene Bestellung. Möchten Sie wirklich eine weitere anlegen?");
+});
+<?php endif; ?>
+</script>
