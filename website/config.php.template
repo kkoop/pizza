@@ -4,3 +4,4 @@ define('K_PRODUCT_NAME',    "Pizzabestelldienst");
 define('K_MAIL_FROM',       "Pizza");
 define('K_MAIL_SIGNATURE',  "-- \r\nPizza");
 define('K_MIN_PASSWORD_LEN', 4);
+define('K_LOGO_URL',        K_BASE_URL . '/img/Logo.svg');
