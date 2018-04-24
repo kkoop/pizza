@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 23. Apr 2018 um 22:32
+-- Erstellungszeit: 24. Apr 2018 um 18:45
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.27-0+deb9u1
 
@@ -214,7 +214,7 @@ ALTER TABLE `orderday`
 -- Constraints der Tabelle `ordering`
 --
 ALTER TABLE `ordering`
-  ADD CONSTRAINT `ordering_ibfk_1` FOREIGN KEY (`day`) REFERENCES `orderday` (`id`),
+  ADD CONSTRAINT `ordering_ibfk_1` FOREIGN KEY (`day`) REFERENCES `orderday` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `ordering_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
