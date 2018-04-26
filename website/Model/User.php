@@ -11,6 +11,8 @@ class User
   public $login;
   public $rights;
   public $disabled;
+  // Einstellungen:
+  public $notify_neworder;
 
   public function __construct()
   {
@@ -314,6 +316,18 @@ class User
       return true;
     }
     return false;
+  }
+  
+/**
+ * @brief Schreibt die Einstellungen in die Db
+ * 
+ * Schreibt die Member-Variablen im Bereich "Einstellungen".
+ * @return void
+ */
+  public function writeSettings()
+  {
+    $stmt = Db::prepare("UPDATE user SET notify_neworder=:notfy_neworder WHERE id=:id");
+    return $stmt->execute([':id' => $this->id, ':notfy_neworder' => $this->notify_neworder]);
   }
   
 /**

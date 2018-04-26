@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 24. Apr 2018 um 18:45
+-- Erstellungszeit: 26. Apr 2018 um 23:15
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.27-0+deb9u1
 
@@ -87,7 +87,8 @@ CREATE TABLE `user` (
   `password` char(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rights` char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'RW',
-  `disabled` tinyint(1) NOT NULL DEFAULT '0'
+  `disabled` tinyint(1) NOT NULL DEFAULT '0',
+  `notify_neworder` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -223,6 +224,12 @@ ALTER TABLE `ordering`
 ALTER TABLE `payment`
   ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`fromuser`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`touser`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints der Tabelle `user__passwordreset`
+--
+ALTER TABLE `user__passwordreset`
+  ADD CONSTRAINT `user__passwordreset_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `user__remember`

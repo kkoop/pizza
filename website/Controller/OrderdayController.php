@@ -19,6 +19,21 @@ class OrderdayController extends Controller
         $this->view->setError("Fehler beim Anlegen des Bestelltages");
         return;
       }
+      // E-Mail an alle, die eine haben möchten, aber nicht an uns selbst
+      $url = "/";
+      if (isset($_SERVER['SERVER_NAME'])) {
+        $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
+      }
+      foreach (Model\User::readAll() as $user) {
+        if ($user->notify_neworder && $user->id != $_SESSION['user']->id) {
+          \Pizza\Library\Mailer::mail($user->login, 
+            "Neue gemeinsame Bestellung", 
+            sprintf("Hallo,\r\n\r\neine neue gemeinsame Bestellung wurde angelegt.\r\n".
+              "Unter %s%s kannst du deine Bestellung hinzufügen.\r\n",
+              "$url/orderday/view/?id=",
+              $day->id));
+        }
+      }
     } else {
       if (!($day = Model\Orderday::read($_REQUEST['id']))) {
         $this->view->setError("Fehler beim Lesen des Bestelltages");

@@ -1,3 +1,29 @@
 <div class="container">
+<?php
+if (isset($successMessage)): ?>
+  <div class="alert alert-success alert-dismissible fade in">
+    <?= htmlspecialchars($successMessage) ?><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  </div>
+<script>
+  setTimeout(function(){ $(".alert").slideUp() }, 5000);
+</script>
+<?php
+endif; ?>
+  
   <h1>Einstellungen</h1>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Benachrichtigungen</h4>
+    </div>
+    <div class="panel-body">
+      <form method="post" action="<?=K_BASE_URL?>/settings">
+        E-Mail senden, wenn
+        <div class="checkbox"><label>
+          <input type="checkbox" name="notify_neworder" <?=$user->notify_neworder ? "checked" : ""?> value="1">
+          eine neue gemeinsame Bestellung angelegt wurde
+        </label></div>
+        <button type="submit" class="btn btn-primary">Speichern</button>
+      </form>
+    </div>
+  </div>
 </div>

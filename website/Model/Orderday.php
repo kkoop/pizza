@@ -26,7 +26,8 @@ class Orderday
       "LEFT JOIN ordering ON ordering.day=orderday.id ".
       "WHERE time>=FROM_UNIXTIME(:startdate) ".
      ($endDate ? "AND time<=FROM_UNIXTIME(:enddate)" : ""). 
-     "GROUP BY orderday.id");
+     "GROUP BY orderday.id ".
+     "ORDER BY time DESC");
     $params = [":startdate" => $startDate];
     if ($endDate)
       $params[":enddate"] = $endDate;
