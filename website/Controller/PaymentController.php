@@ -11,6 +11,7 @@ class PaymentController extends  Controller
     $endTime   = time();
     $payments = Model\Payment::getForUser($startTime, $endTime);
     $orders = Model\Orderday::readAll($startTime, $endTime);
+    $orders = array_filter($orders, function($o) { return $o->organizer==$_SESSION['user']->id;});
     $transactions = array_merge($payments, $orders);
     usort($transactions, function($a, $b) {
       return $a->time-$b->time;

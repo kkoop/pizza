@@ -5,7 +5,7 @@ class Orderday
 {
   public $id;
   public $time;
-  private $organizer;
+  public $organizer;
   public $deliveryservice;
   public $orderCount;
   
