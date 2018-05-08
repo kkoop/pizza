@@ -14,6 +14,7 @@
       <ul class="list-group">
 <?php 
       $ownOrder = false;
+      $sum = 0.0;
       foreach ($orders as $order) {
         if ($order->getUser()->id == $_SESSION['user']->id && $orderday->time > time()) {
           $ownOrder = true;
@@ -29,6 +30,7 @@
           !empty($order->comment) ? '('.htmlspecialchars($order->comment).')' : '',
           $order->price,
           $editLink);
+        $sum += $order->price;
       }
       if (!$ownOrder && $orderday->time > time()) {
         printf('<li class="list-group-item"><a href="%s/order/edit/?day=%d" class="btn btn-primary">Bestellung hinzufügen</a></li>',
@@ -37,6 +39,9 @@
       }
 ?>
       </ul>
+    </div>
+    <div class="panel-footer">
+      <?= sprintf("Insgesamt %d Besteller, %.2f €", count($orders), $sum) ?>
     </div>
   </div>
   
