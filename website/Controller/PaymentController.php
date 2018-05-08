@@ -62,6 +62,9 @@ class PaymentController extends  Controller
           }
         }
       }
+      $debts = array_filter($debts, function($item) {
+        return $item['amount'] > 0;
+      });
       $this->view->setVars(['users' => $users, 
                             'debts' => $debts]);
     }
