@@ -39,7 +39,9 @@ class Orderday
   {
     $stmt = Db::prepare("INSERT INTO orderday (time,organizer,deliveryservice) VALUES (:time,:user,:service)");
     if ($stmt->execute(['time' => $time, ':user' => $_SESSION['user']->id, ':service' => $service])) {
-      return self::read(Db::lastInsertId());
+      $day = self::read(Db::lastInsertId());
+      Log::info("created orderday {$day->id}");
+      return $day;
     }
     return null;
   }

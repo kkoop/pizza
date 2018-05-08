@@ -42,6 +42,7 @@ class Order
                     ":product" => $product,
                     ":comment" => $comment,
                     ":price"   => $price]);
+    Log::info(sprintf("created order %s (%.2f €) for day %d", $product, $price, $dayId));
   }
   
   public function update()
@@ -51,6 +52,7 @@ class Order
                     ":comment" => $this->comment,
                     ":price"   => $this->price,
                     ":id"      => $this->id]);
+    Log::info(sprintf("changed order %d: %s (%.2f €) for day %d", $this->id, $this->product, $this->price, $this->day));
   }
   
   public function getUser()

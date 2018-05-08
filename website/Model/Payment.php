@@ -29,7 +29,11 @@ class Payment
   public static function received($fromUser, $amount)
   {
     $stmt = Db::prepare("INSERT INTO payment (fromuser,touser,amount) VALUES (:from,:to,:amount)");
-    return $stmt->execute([':from' => $fromUser, ':to' => $_SESSION['user']->id, ':amount' => $amount]);
+    if ($stmt->execute([':from' => $fromUser, ':to' => $_SESSION['user']->id, ':amount' => $amount])) {
+      Log::info(sprintf("got payed %.2f € from user %d", $amount, $fromUser));
+      return true;
+    }
+    return false;
   }
   
   public static function getPayedPerUser()
