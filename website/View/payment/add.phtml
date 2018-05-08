@@ -58,8 +58,6 @@ function checkNeededRows() {
     $table.append($newRow);
   }
 }
-$("#tblPayments").on("change","input",function(e) {
-  checkNeededRows();
-});
+$("#tblPayments").on("keyup","input",checkNeededRows);
 checkNeededRows();
 </script>
