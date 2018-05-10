@@ -15,7 +15,7 @@ class OrderdayController extends Controller
   {
     $this->view->setVars(['title' => "Bestellungen"]);
     if (isset($_POST['time'])) {
-      if (($day = Model\Orderday::create($_POST['time'], $_POST['deliveryService'])) == null) {
+      if (($day = Model\Orderday::create($_POST['time'], $_POST['deliveryService'], $_POST['deliveryServiceUrl'])) == null) {
         $this->view->setError("Fehler beim Anlegen des Bestelltages");
         return;
       }
