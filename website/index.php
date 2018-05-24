@@ -69,7 +69,7 @@ try {
   http_response_code(404);
   include('error_pages/404.php');
 } catch (\Pizza\Library\NeedsLoginException $e) {
-  $_SESSION['redirect'] = "/$url";
+  $_SESSION['redirect'] = $e->getRedirectUrl();
   header("Location: ".K_BASE_URL."/index/login");
 } catch (\Exception $e) {
   http_response_code(500);
