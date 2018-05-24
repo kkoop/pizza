@@ -44,6 +44,10 @@ class OrderController extends  Controller
         $this->view->setError("Fehler beim Lesen der Bestellung");
         return;
       }
+      if ($order->getUser()->id != $_SESSION['user']->id) {
+        $this->view->setError("Bestellung von anderem Benutzer");
+        return;
+      }
       $this->view->setVars(['title' => "Bestellung bearbeiten", 'order' => $order, 'orderday' => $order->getDay()]);
     } else {
       if (!($day = Model\Orderday::read($_REQUEST['day']))) {
