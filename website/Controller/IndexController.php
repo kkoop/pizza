@@ -121,7 +121,7 @@ class IndexController extends Controller
       $subject = sprintf(_("Passwort für %s zurücksetzen"), K_PRODUCT_NAME);
       $text = sprintf(_("Guten Tag,\n\nSie haben vor Kurzem ein neues Passwort beantragt. Falls diese Anfrage nicht von Ihnen kam, ignorieren Sie diese E-Mail.\n".
         "Um Ihr Passwort zurückzusetzen, folgen Sie diesem Link: \n%s\n\n".
-        "Mit freundlichen Grüßen\nIhre LD DIDACTIC GmbH\n\nDies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\n"),
+        "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\n"),
         "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME'])."/index/resetPassword?token=%s");
       Model\User::passwordResetEmail($_POST['email'], $_SERVER['REMOTE_ADDR'], $subject, $text);
       // immer positive Rückmeldung, egal ob E-Mail wirklich geschickt wird, damit niemand E-Mails auf 

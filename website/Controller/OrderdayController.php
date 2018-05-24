@@ -28,8 +28,9 @@ class OrderdayController extends Controller
         if ($user->notify_neworder && $user->id != $_SESSION['user']->id) {
           \Pizza\Library\Mailer::mail($user->login, 
             "Neue gemeinsame Bestellung", 
-            sprintf("Hallo,\r\n\r\neine neue gemeinsame Bestellung wurde angelegt.\r\n".
-              "Unter %s%s kannst du deine Bestellung hinzufügen.\r\n",
+            sprintf("Hallo,\n\neine neue gemeinsame Bestellung wurde angelegt.\n".
+              "Unter %s%d kannst du deine Bestellung hinzufügen.\n\n".
+              "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\n",
               "$url/orderday/view/?id=",
               $day->id));
         }
