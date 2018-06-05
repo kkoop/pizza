@@ -36,3 +36,15 @@ td.negative {
 td.currency,th.currency {
   text-align: right;
 }
+
+// Einstellungen für Ausdruck
+@media print {
+  // keine URLs drucken
+  a[href]:after {
+    content: "";
+  }
+  // kein Footer
+  footer {
+    display:none;
+  }
+}
