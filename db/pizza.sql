@@ -58,7 +58,7 @@ CREATE TABLE `ordering` (
   `user` int(11) NOT NULL,
   `product` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `comment` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `price` decimal(3,2) NOT NULL
+  `price` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -72,7 +72,7 @@ CREATE TABLE `payment` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fromuser` int(11) NOT NULL,
   `touser` int(11) NOT NULL,
-  `amount` decimal(3,2) NOT NULL
+  `amount` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
