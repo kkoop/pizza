@@ -1,0 +1,10 @@
+<div class="container">
+  <h2>Statistik</h2>
+  <h3>Beliebteste Gerichte</h3>
+  <table class="table">
+    <tr><th>Gericht</th><th>Anzahl</th></tr>
+<?php foreach ($favourites as $name=>$count): ?>
+    <tr><td><?=htmlspecialchars($name)?></td><td><?=$count?></td></tr>
+<?php endforeach; ?>
+  </table>
+</div>
