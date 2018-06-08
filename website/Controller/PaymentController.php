@@ -30,6 +30,12 @@ class PaymentController extends  Controller
                           
   }
   
+  public function openAction()
+  {
+    $this->view->setVars(['title' => "Offene Beträge"]);
+    // TODO:
+  }
+  
   public function addAction()
   {
     $this->view->setVars(['title' => "Zahlungen"]);
