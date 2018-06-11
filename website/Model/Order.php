@@ -78,4 +78,16 @@ class Order
     $stmt->execute([":user" => $_SESSION['user']->id, ":user2" => $_SESSION['user']->id]);
     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
   }
+
+  public static function getOwingToUser()
+  {
+    $stmt = Db::prepare("SELECT user.id AS user,user.name AS name,SUM(price) AS amount ".
+      "FROM ordering ".
+      "JOIN orderday ON orderday.id=ordering.day ".
+      "JOIN user ON user.id=orderday.organizer ".
+      "WHERE orderday.organizer!=:user AND ordering.user=:user2 ".
+      "GROUP BY orderday.organizer");
+    $stmt->execute([":user" => $_SESSION['user']->id, ":user2" => $_SESSION['user']->id]);
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+  }
 }

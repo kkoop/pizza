@@ -46,4 +46,15 @@ class Payment
     $stmt->execute([":user" => $_SESSION['user']->id]);
     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
   }
+  
+  public static function getPayedToUser()
+  {
+    $stmt = Db::prepare("SELECT user.id AS user,user.name AS name,SUM(amount) AS amount ".
+      "FROM payment ".
+      "JOIN user ON user.id=payment.touser ".
+      "WHERE fromuser=:user ".
+      "GROUP BY touser");
+    $stmt->execute([":user" => $_SESSION['user']->id]);
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+  }
 }

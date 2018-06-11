@@ -1,3 +1,18 @@
 <div class="container">
   <h2>Offene Beträge</h2>
+  <table class="table table-striped">
+    <tr><th>Benutzer</th><th>Betrag</th></tr>
+<?php 
+    foreach ($debts as $debt) {
+      printf('<tr><td>%s</td><td>%.2f €</td></tr>',
+        htmlspecialchars($debt['name']),
+        $debt['amount']);
+    }
+    foreach ($debtsOwed as $debt) {
+      printf('<tr><td>%s</td><td class="negative">- %.2f €</td></tr>',
+        htmlspecialchars($debt['name']),
+        $debt['amount']);
+    } 
+?>
+  </table>
 </div>

@@ -33,7 +33,32 @@ class PaymentController extends  Controller
   public function openAction()
   {
     $this->view->setVars(['title' => "Offene Beträge"]);
-    // TODO:
+    $owedPerUser = Model\Order::getOwedPerUser();
+    $paymentsPerUser = Model\Payment::getPayedPerUser();
+    $debts = array();
+    foreach ($owedPerUser as $owed) {
+      $debts[] = $owed;
+      foreach ($paymentsPerUser as $payed) {
+        if ($payed['user'] == $owed['user']) {
+          $debts[count($debts)-1]['amount'] -= $payed['amount'];
+          break;
+        }
+      }
+    }
+    $owingToUser = Model\Order::getOwingToUser();
+    $paymentsToUser = Model\Payment::getPayedToUser();
+    $debtsOwed = array();
+    foreach ($owingToUser as $owing) {
+      $debtsOwed[] = $owing;
+      foreach ($paymentsToUser as $payed) {
+        if ($payed['user'] == $owing['user']) {
+          $debtsOwed[count($debtsOwed)-1]['amount'] -= $payed['amount'];
+          break;
+        }
+      }
+    }
+    $this->view->setVars(['debts'     => $debts,
+                          'debtsOwed' => $debtsOwed]);
   }
   
   public function addAction()
