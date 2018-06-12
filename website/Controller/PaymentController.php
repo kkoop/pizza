@@ -27,40 +27,52 @@ class PaymentController extends  Controller
                           'endDate'      => strftime("%x", $endTime),
                           'transactions' => $transactions,
                           'balance'      => $balance]);
-                          
   }
-  
+
   public function openAction()
   {
     $this->view->setVars(['title' => "Offene Beträge"]);
-    $owedPerUser = Model\Order::getOwedPerUser();
-    $paymentsPerUser = Model\Payment::getPayedPerUser();
-    $debts = array();
+
+    $owedPerUser = Model\Order::getOwedPerUser();           // Schulden anderer Nutzer bei uns
+    $owingToUser = Model\Order::getOwingToUser();           // unsere Schulden bei anderen Nutzern
+    $paymentsPerUser = Model\Payment::getPayedPerUser();    // Zahlungen anderer Nutzer an uns
+    $paymentsToUser = Model\Payment::getPayedToUser();      // Zahlungen an andere Nutzer
+
+    $debts = array(); // Einträge: ['user'=>id, 'name'=>username, 'amount'=>betrag, positiv: wir bekommen Geld]
     foreach ($owedPerUser as $owed) {
-      $debts[] = $owed;
-      foreach ($paymentsPerUser as $payed) {
-        if ($payed['user'] == $owed['user']) {
-          $debts[count($debts)-1]['amount'] -= $payed['amount'];
-          break;
-        }
+      $debts[$owed['user']] = $owed;
+    }
+    foreach ($paymentsPerUser as $payed) {
+      if (!isset($debts[$payed['user']])) {
+        $debts[$payed['user']] = $payed;
+        $debts[$payed['user']]['amount'] = -$payed['amount'];
+      } else {
+        $debts[$payed['user']]['amount'] -= $payed['amount'];
       }
     }
-    $owingToUser = Model\Order::getOwingToUser();
-    $paymentsToUser = Model\Payment::getPayedToUser();
-    $debtsOwed = array();
-    foreach ($owingToUser as $owing) {
-      $debtsOwed[] = $owing;
-      foreach ($paymentsToUser as $payed) {
-        if ($payed['user'] == $owing['user']) {
-          $debtsOwed[count($debtsOwed)-1]['amount'] -= $payed['amount'];
-          break;
-        }
+    foreach ($owingToUser as $owed) {
+      if (!isset($debts[$owed['user']])) {
+        $debts[$owed['user']] = $owed;
+        $debts[$owed['user']]['amount'] = -$owed['amount'];
+      } else {
+        $debts[$owed['user']]['amount'] -= $owed['amount'];
       }
     }
-    $this->view->setVars(['debts'     => $debts,
-                          'debtsOwed' => $debtsOwed]);
+    foreach ($paymentsToUser as $payed) {
+      if (!isset($debts[$payed['user']])) {
+        $debts[$payed['user']] = $payed;
+      } else {
+        $debts[$payed['user']]['amount'] += $payed['amount'];
+      }
+    }
+    // leere Einträge entfernen
+    $debts = array_filter($debts, function($item) {
+      return $item['amount'] != 0.0;
+    });
+
+    $this->view->setVars(['debts' => $debts]);
   }
-  
+
   public function addAction()
   {
     $this->view->setVars(['title' => "Zahlungen"]);
@@ -100,7 +112,7 @@ class PaymentController extends  Controller
                             'debts' => $debts]);
     }
   }
-  
+
   public function editAction()
   {
     $this->view->setVars(['title' => "Zahlungen"]);
