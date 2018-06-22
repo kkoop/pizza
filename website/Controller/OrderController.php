@@ -21,6 +21,10 @@ class OrderController extends  Controller
         $this->view->setError("Bestellung von anderem Benutzer");
         return;
       }
+      if ($order->getDay()->time < time()) {
+        $this->view->setError("Abgelaufene Bestellung kann nicht geändert werden");
+        return;
+      }
       $order->delete();
       header("Location: ".K_BASE_URL."/orderday/view/?id={$order->day}");
       exit(0);
@@ -35,6 +39,10 @@ class OrderController extends  Controller
           $this->view->setError("Bestellung von anderem Benutzer");
           return;
         }
+        if ($order->getDay()->time < time()) {
+          $this->view->setError("Abgelaufene Bestellung kann nicht geändert werden");
+          return;
+        }
         $order->product = $_POST['product'];
         $order->comment = $_POST['comment'];
         $order->price   = $_POST['price'];
@@ -45,6 +53,10 @@ class OrderController extends  Controller
         // neuer Eintrag
         if (!($day = Model\Orderday::read($_POST['day']))) {
           $this->view->setError("Fehler beim Lesen des Bestelltags");
+          return;
+        }
+        if ($day->time < time()) {
+          $this->view->setError("Zu abgelaufener Bestellung kann nichts hinzugefügt werden");
           return;
         }
         Model\Order::create($day->id, $_POST['product'], $_POST['comment'], $_POST['price']);
