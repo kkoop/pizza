@@ -11,7 +11,20 @@ class OrderController extends  Controller
   
   public function editAction()
   {
-    if (isset($_POST['day'])) {
+    if (isset($_POST['delete'])) {
+      // Eintrag löschen
+      if (!($order = Model\Order::read($_POST['order']))) {
+        $this->view->setError("Fehler beim Lesen der Bestellung");
+        return;
+      }
+      if ($order->getUser()->id != $_SESSION['user']->id) {
+        $this->view->setError("Bestellung von anderem Benutzer");
+        return;
+      }
+      $order->delete();
+      header("Location: ".K_BASE_URL."/orderday/view/?id={$order->day}");
+      exit(0);
+    } elseif (isset($_POST['day'])) {
       if (!empty($_POST['order'])) {
         // Eintrag bearbeitet
         if (!($order = Model\Order::read($_POST['order']))) {

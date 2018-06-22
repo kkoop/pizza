@@ -55,6 +55,16 @@ class Order
     Log::info(sprintf("changed order %d: %s (%.2f €) for day %d", $this->id, $this->product, $this->price, $this->day));
   }
   
+  public function delete()
+  {
+    $stmt = Db::prepare("DELETE FROM ordering WHERE id=:id");
+    if ($stmt->execute([":id" => $this->id])) {
+      Log::info(sprintf("deleted order %d: %s (%.2f €) for day %d", $this->id, $this->product, $this->price, $this->day));
+      return true;
+    }
+    return false;
+  }
+  
   public function getUser()
   {
     if ($this->userObj == null)
