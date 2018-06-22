@@ -14,6 +14,17 @@ class OrderdayController extends Controller
   public function viewAction()
   {
     $this->view->setVars(['title' => "Bestellungen"]);
+    if (!($day = Model\Orderday::read($_REQUEST['id']))) {
+      $this->view->setError("Fehler beim Lesen des Bestelltages");
+      return;
+    }
+    $this->view->setVars(['orderday' => $day,
+                          'orders'   => $day->getOrders()]);
+  }
+  
+  public function newAction()
+  {
+    $this->view->setVars(['title' => "Bestellungen"]);
     if (isset($_POST['time'])) {
       if (($day = Model\Orderday::create($_POST['time'], $_POST['deliveryService'], $_POST['deliveryServiceUrl'])) == null) {
         $this->view->setError("Fehler beim Anlegen des Bestelltages");
@@ -35,18 +46,8 @@ class OrderdayController extends Controller
               $day->id));
         }
       }
-    } else {
-      if (!($day = Model\Orderday::read($_REQUEST['id']))) {
-        $this->view->setError("Fehler beim Lesen des Bestelltages");
-        return;
-      }
+      header("Location: ".K_BASE_URL."/orderday/view/?id={$day->id}");
+      exit(0);
     }
-    $this->view->setVars(['orderday' => $day,
-                          'orders'   => $day->getOrders()]);
-  }
-  
-  public function newAction()
-  {
-    $this->view->setVars(['title' => "Bestellungen"]);
   }
 }
