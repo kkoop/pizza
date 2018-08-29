@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 10. Mai 2018 um 21:17
+-- Erstellungszeit: 29. Aug 2018 um 21:18
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
--- PHP-Version: 7.0.27-0+deb9u1
+-- PHP-Version: 7.0.30-0+deb9u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -43,7 +43,9 @@ CREATE TABLE `orderday` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `organizer` int(11) DEFAULT NULL,
   `deliveryservice` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pizza Paradies',
-  `url` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `url` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `maildue` tinyint(1) NOT NULL,
+  `mailready` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

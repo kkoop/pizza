@@ -8,11 +8,14 @@ class Orderday
   public $organizer;
   public $deliveryservice;
   public $url;
+  public $maildue;
+  public $mailready;
   public $orderCount;
+  public $amount;
   
   public static function read($id)
   {
-    $stmt = Db::prepare("SELECT orderday.id,UNIX_TIMESTAMP(time) AS time,organizer,deliveryservice,url ".
+    $stmt = Db::prepare("SELECT orderday.id,UNIX_TIMESTAMP(time) AS time,organizer,deliveryservice,url,maildue,mailready ".
       "FROM orderday ".
       "WHERE id=:id");
     $stmt->execute([":id" => $id]);
@@ -22,7 +25,8 @@ class Orderday
   
   public static function readAll($startDate, $endDate=null)
   {
-    $stmt = Db::prepare("SELECT orderday.id,UNIX_TIMESTAMP(time) AS time,organizer,deliveryservice,COUNT(ordering.id) AS orderCount,SUM(price) AS amount ".
+    $stmt = Db::prepare("SELECT orderday.id,UNIX_TIMESTAMP(time) AS time,organizer,deliveryservice,url,maildue,mailready,".
+        "COUNT(ordering.id) AS orderCount,SUM(price) AS amount ".
       "FROM orderday ".
       "LEFT JOIN ordering ON ordering.day=orderday.id ".
       "WHERE time>=FROM_UNIXTIME(:startdate) ".
@@ -33,6 +37,18 @@ class Orderday
     if ($endDate)
       $params[":enddate"] = $endDate;
     $stmt->execute($params);
+    return $stmt->fetchAll(\PDO::FETCH_CLASS, get_class());
+  }
+  
+  /** 
+   * @brief Returns all orderdays 
+   * @return array(Orderday)
+   */
+  public static function readDue()
+  {
+    $stmt = Db::query("SELECT orderday.id,UNIX_TIMESTAMP(time) AS time,organizer,deliveryservice,url,maildue,mailready ".
+      "FROM orderday ".
+      "WHERE time<NOW() AND NOT maildue");
     return $stmt->fetchAll(\PDO::FETCH_CLASS, get_class());
   }
   
@@ -60,5 +76,11 @@ class Orderday
   public function getOrganizer()
   {
     return User::read($this->organizer);
+  }
+  
+  public function mailDueSent()
+  {
+    $stmt = Db::prepare("UPDATE orderday SET maildue=1 WHERE id=:id");
+    $stmt->execute([":id" => $this->id]);
   }
 }

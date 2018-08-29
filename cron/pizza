@@ -1,0 +1,1 @@
+*/1 * * * *   www-data  php /var/www/pizza/scripts/maintenance.php

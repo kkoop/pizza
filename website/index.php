@@ -3,17 +3,8 @@
  * @brief Einstiegspunkt für alle Webseiten
  */
 namespace Pizza;
+require_once('autoloader.php');
 require_once('config.php');
-
-// Autoload für Controller-Klassen registrieren
-spl_autoload_register(function($className) {
-  if (substr($className, 0, 6) != 'Pizza\\')
-    return;
-  $fileName = __DIR__.'/'.str_replace('\\', '//', substr($className, 6)).'.php';
-  if (file_exists($fileName)) {
-    include($fileName);
-  }
-});
 
 setlocale(LC_ALL, "de_DE.utf8");
 //set_exception_handler('Log::exceptionHandler');
