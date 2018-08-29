@@ -20,7 +20,9 @@
   <ul class="list-group">
 <?php foreach ($pastOrderDays as $order): ?>
     <li class="list-group-item">
-      <a href="<?=K_BASE_URL?>/orderday/view/?id=<?=$order->id?>"><?= strftime("%x %X", $order->time) ?></a> 
+      <a href="<?=K_BASE_URL?>/orderday/view/?id=<?=$order->id?>">
+        <?= strftime("%x %X", $order->time) ?> - <?= htmlspecialchars($order->deliveryservice) ?>
+      </a> 
       <span class="badge"><?=$order->orderCount?></span>
     </li>
 <?php endforeach; ?>
