@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 29. Aug 2018 um 21:18
+-- Erstellungszeit: 29. Aug 2018 um 21:58
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.30-0+deb9u1
 
@@ -40,7 +40,7 @@ CREATE TABLE `log` (
 
 CREATE TABLE `orderday` (
   `id` int(11) NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `organizer` int(11) DEFAULT NULL,
   `deliveryservice` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pizza Paradies',
   `url` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
