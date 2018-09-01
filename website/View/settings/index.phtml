@@ -22,6 +22,14 @@ endif; ?>
           <input type="checkbox" name="notify_neworder" <?=$user->notify_neworder ? "checked" : ""?> value="1">
           eine neue gemeinsame Bestellung angelegt wurde
         </label></div>
+        <div class="checkbox"><label>
+          <input type="checkbox" name="notify_orderdue" <?=$user->notify_orderdue ? "checked" : ""?> value="1">
+          eine eigene Bestellung fällig ist
+        </label></div>
+        <div class="checkbox"><label>
+          <input type="checkbox" name="notify_orderready" <?=$user->notify_orderready ? "checked" : ""?> value="1">
+          die gemeinsame Bestellung geliefert wurde
+        </label></div>
         <button type="submit" class="btn btn-primary">Speichern</button>
       </form>
     </div>

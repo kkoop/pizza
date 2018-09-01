@@ -83,4 +83,10 @@ class Orderday
     $stmt = Db::prepare("UPDATE orderday SET maildue=1 WHERE id=:id");
     $stmt->execute([":id" => $this->id]);
   }
+  
+  public function mailReadySent()
+  {
+    $stmt = Db::prepare("UPDATE orderday SET mailready=1 WHERE id=:id");
+    $stmt->execute([":id" => $this->id]);
+  }
 }

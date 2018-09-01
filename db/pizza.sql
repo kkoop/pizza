@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 29. Aug 2018 um 21:58
+-- Erstellungszeit: 01. Sep 2018 um 17:04
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.30-0+deb9u1
 
@@ -91,7 +91,9 @@ CREATE TABLE `user` (
   `token` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rights` char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'RW',
   `disabled` tinyint(1) NOT NULL DEFAULT '0',
-  `notify_neworder` tinyint(1) NOT NULL DEFAULT '1'
+  `notify_neworder` tinyint(1) NOT NULL DEFAULT '1',
+  `notify_orderdue` tinyint(1) NOT NULL DEFAULT '1',
+  `notify_orderready` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

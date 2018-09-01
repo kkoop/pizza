@@ -16,14 +16,18 @@ class Maintenance
   private function checkOrderReady()
   {
     foreach (Model\Orderday::readDue() as $day) {
-      $msg = "Hallo,\r\n\r\ndie Bestellzeit der gemeinsamen Bestellung ist erreicht. Folgende Bestellungen liegen vor:\r\n";
-      foreach ($day->getOrders() as $order) {
-        $msg .= sprintf("* %s%s, %.2f€\r\n", 
-                        $order->product, 
-                        !empty($order->comment) ? " ({$order->comment})" : "", 
-                        $order->price);
+      if ($day->getOrganizer()->notify_orderdue) {
+        $msg = "Hallo,\r\n\r\ndie Bestellzeit der gemeinsamen Bestellung ist erreicht. Folgende Bestellungen liegen vor:\r\n";
+        foreach ($day->getOrders() as $order) {
+          $msg .= sprintf("* %s%s, %.2f€\r\n", 
+                          $order->product, 
+                          !empty($order->comment) ? " ({$order->comment})" : "", 
+                          $order->price);
+        }
+        $msg .= "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n";
+
+        \Pizza\Library\Mailer::mail($day->getOrganizer()->login, "Bestellung ist bereit", $msg);
       }
-      \Pizza\Library\Mailer::mail($day->getOrganizer()->login, "Bestellung ist bereit", $msg);
       $day->mailDueSent();
     }
   }

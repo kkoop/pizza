@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="divMain">
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3>Bestellungen <?=strftime("%x %X", $orderday->time)?></h3>
@@ -38,13 +38,16 @@
           $editLink);
         $sum += $order->price;
       }
-      if ($orderday->time > time()) {
+      if ($showBtnAdd) {
         printf('<li class="list-group-item"><a href="%s/order/edit/?day=%d" id="lnkAddOrder" class="btn btn-primary">Bestellung hinzufügen</a></li>',
           K_BASE_URL,
           $orderday->id);
       }
 ?>
       </ul>
+<?php if ($showBtnOrderReady): ?>
+        <button class="btn btn-primary" id="btnOrderReady">Essen ist da</button>
+<?php endif; ?>
     </div>
     <div class="panel-footer">
       <?= sprintf("Insgesamt %d Besteller, %.2f €", count($orders), $sum) ?>
@@ -53,10 +56,29 @@
   
 </div>
 
-<?php if ($ownOrder): ?>
 <script>
+<?php if ($ownOrder): ?>
 $("#lnkAddOrder").click(function(e) {
   return confirm("Sie haben schon etwas bestellt. Möchten Sie trotzdem eine weitere Bestellung hinzufügen?");
 });
-</script>
 <?php endif; ?>
+$("#btnOrderReady").click(function(e) {
+  $(this).prop("disabled", "true");
+  $(this).text("Sende E-Mails...");
+  $('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> ').prependTo(this);
+  $.ajax({
+    url: "<?=K_BASE_URL?>/ajax/orderday/readyMail/?id=<?=$orderday->id?>", 
+    success: function(data) {
+      if (data["result"] != "success") {
+        $("#divMain").prepend("<div class='alert alert-danger'><?="Fehler beim Senden"?> (" + data["error"] + ").</div>");
+      } else {
+        $("#divMain").prepend("<div class='alert alert-success'><?="E-Mails gesendet."?></div>");
+        $("#btnOrderReady").hide();
+      }
+    },
+    error: function(xhr, status, error) {
+      $("#divMain").prepend("<div class='alert alert-danger'><?=_("Fehler beim Senden")?> (" + error + ").</div>");
+    }
+  });
+});
+</script>

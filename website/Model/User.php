@@ -13,6 +13,8 @@ class User
   public $disabled;
   // Einstellungen:
   public $notify_neworder;
+  public $notfiy_orderdue;
+  public $notfiy_orderready;
 
   public function __construct()
   {
@@ -326,8 +328,12 @@ class User
  */
   public function writeSettings()
   {
-    $stmt = Db::prepare("UPDATE user SET notify_neworder=:notfy_neworder WHERE id=:id");
-    return $stmt->execute([':id' => $this->id, ':notfy_neworder' => $this->notify_neworder]);
+    $stmt = Db::prepare("UPDATE user SET notify_neworder=:neworder,notify_orderdue=:due,notify_orderready=:ready ".
+      "WHERE id=:id");
+    return $stmt->execute([":id"        => $this->id, 
+                           ":neworder"  => $this->notify_neworder,
+                           ":due"       => $this->notify_orderdue,
+                           ":ready"     => $this->notify_orderready]);
   }
   
 /**

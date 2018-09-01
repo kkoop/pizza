@@ -9,6 +9,8 @@ class SettingsController extends Controller
     $this->view->setVars(['title' => "Einstellungen"]);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $_SESSION['user']->notify_neworder = $_POST['notify_neworder'] ?? false;
+      $_SESSION['user']->notify_orderdue = $_POST['notify_orderdue'] ?? false;
+      $_SESSION['user']->notify_orderready = $_POST['notify_orderready'] ?? false;
       if ($_SESSION['user']->writeSettings()) {
         $this->view->setVars(['successMessage' => "Einstellungen gespeichert"]);
       } else {

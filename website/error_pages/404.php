@@ -14,7 +14,7 @@
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="<?=K_BASE_URL?>/">
-          <img src="<?=K_BASE_URL?>/img/Logo.svg" onerror="this.onerror=null; this.src='<?=K_BASE_URL?>/img/Logo.png'" alt="logo">
+          <img src="<?=K_LOGO_URL?>" alt="logo">
         </a>
       </div>
     </div>
@@ -22,7 +22,7 @@
 
   <div class="container" role="main">
     <div class="col-sm-6 col-sm-push-6">
-      <img src="<?=K_BASE_URL?>/img/Logo_broken.svg">
+      <!--<img src="<?=K_BROKEN_LOGO_URL?>" alt="logo">-->
     </div>
     <div class="col-sm-6 col-sm-pull-6">
       <h1>Fehler 404 - Nicht gefunden</h1>
