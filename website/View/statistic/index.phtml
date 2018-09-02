@@ -1,10 +1,22 @@
 <div class="container">
   <h2>Statistik</h2>
   <h3>Beliebteste Gerichte</h3>
+  <p>Für angemeldeten Benutzer</p>
   <table class="table">
     <tr><th>Gericht</th><th>Anzahl</th></tr>
 <?php foreach ($favourites as $name=>$count): ?>
     <tr><td><?=htmlspecialchars($name)?></td><td><?=$count?></td></tr>
 <?php endforeach; ?>
   </table>
+  <hr>
+  
+  <h3>Beliebteste Lieferdienste</h3>
+  <p>Für alle Benutzer</p>
+  <table class="table">
+    <tr><th>Lieferdienst</th><th>Anzahl Bestellungen</th><th>Gesamtbetrag</th></tr>
+<?php foreach ($services as $service): ?>
+    <tr><td><?=htmlspecialchars($service->name)?></td><td><?=$service->count?></td><td><?=sprintf("%.2f€", $service->price)?></td></tr>
+<?php endforeach; ?>
+  </table>
+
 </div>
