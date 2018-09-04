@@ -7,8 +7,15 @@ class PaymentController extends  Controller
   public function indexAction()
   {
     $this->view->setVars(['title' => "Zahlungen"]);
-    $startTime = strtotime("-1 month");
-    $endTime   = time();
+    if (!empty($_REQUEST['startDate'])) {
+      $startTime = strtotime($_REQUEST['startDate']);
+      $endTime   = strtotime($_REQUEST['endDate']." 23:59:59");
+      if (!($endTime > $startTime))
+        $endTime = time();
+    } else {
+      $startTime = strtotime("-1 month");
+      $endTime   = time();
+    }
     $payments = Model\Payment::getForUser($startTime, $endTime);
     $orders = Model\Orderday::readAll($startTime, $endTime);
     $orders = array_filter($orders, function($o) { return $o->organizer==$_SESSION['user']->id;});
@@ -23,8 +30,8 @@ class PaymentController extends  Controller
       else 
         $balance -= $transaction->amount;
     }
-    $this->view->setVars(['startDate'    => strftime("%x", $startTime),
-                          'endDate'      => strftime("%x", $endTime),
+    $this->view->setVars(['startDate'    => strftime("%Y-%m-%d", $startTime),
+                          'endDate'      => strftime("%Y-%m-%d", $endTime),
                           'transactions' => $transactions,
                           'balance'      => $balance]);
   }
