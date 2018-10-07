@@ -44,7 +44,8 @@ class OrderdayController extends Controller
             sprintf("Hallo,\r\n\r\neine neue gemeinsame Bestellung wurde angelegt.\r\n".
               "Unter %s kannst du deine Bestellung hinzufügen.\r\n".
               "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
-              "$url/orderday/view/?id=".$day->id));
+              "$url/orderday/view/?id=".$day->id),
+            strtotime($_POST['time']));
         }
       }
       header("Location: ".K_BASE_URL."/orderday/view/?id={$day->id}");
@@ -79,8 +80,8 @@ class OrderdayController extends Controller
       \Pizza\Library\Mailer::mail($user->login, "Bestellung ist da", 
         sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s ist angekommen.\r\n".
                 "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
-              "$url/orderday/view/?id=".$day->id));
-        
+              "$url/orderday/view/?id=".$day->id),
+        strtotime("+1 hour"));
     }
   }
 }

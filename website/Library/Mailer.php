@@ -17,16 +17,17 @@ class Mailer
     return self::$instance;
   }
 
-  public static function mail($to, $subject, $message)
+  public static function mail($to, $subject, $message, $expiry=null)
   {
-    self::getInstance()->doMail($to, $subject, $message);
+    self::getInstance()->doMail($to, $subject, $message, $expiry);
   }
 
-  protected function doMail($to, $subject, $message)
+  protected function doMail($to, $subject, $message, $expiry)
   {
     mail($to, $subject, $message . K_MAIL_SIGNATURE,
       "From: ".K_MAIL_FROM."\r\n".
       "Content-type: text/plain; charset=utf-8 \r\n".
+      ($expiry ? "Expiry-Date: ".date("r", $expiry)."\r\n" : "").
       "Date: ".date("r (T)")."\r\n");
   }
 }
