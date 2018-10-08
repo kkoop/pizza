@@ -21,7 +21,8 @@ class OrderdayController extends Controller
     $this->view->setVars(['orderday'          => $day,
                           'orders'            => $day->getOrders(),
                           'showBtnAdd'        => $day->time > time(),
-                          'showBtnOrderReady' => $day->time <= time() && !$day->mailready && $day->organizer==$_SESSION['user']->id]);
+                          'showBtnOrderReady' => $day->time < time() && $day->time+86400 > time() 
+                                             && !$day->mailready && $day->organizer==$_SESSION['user']->id]);
   }
   
   public function newAction()
