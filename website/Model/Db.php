@@ -56,6 +56,21 @@ class Db {
   {
     return self::getInstance()->pdo->lastInsertId();
   }
+  
+  public static function beginTransaction()
+  {
+    return self::getInstance()->pdo->beginTransaction();
+  }
+  
+  public static function commit()
+  {
+    return self::getInstance()->pdo->commit();
+  }
+  
+  public static function rollBack()
+  {
+    return self::getInstance()->pdo->rollBack();
+  }
 
   private $pdo;
   private static $instance;

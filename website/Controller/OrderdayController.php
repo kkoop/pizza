@@ -49,6 +49,10 @@ class OrderdayController extends Controller
             strtotime($_POST['time']));
         }
       }
+      // Speisekarte scrapen
+      if ($scraper = \Pizza\Library\Scraper::create($_POST['deliveryServiceUrl'])) {
+        $scraper->scrape();
+      }
       header("Location: ".K_BASE_URL."/orderday/view/?id={$day->id}");
       exit(0);
     }

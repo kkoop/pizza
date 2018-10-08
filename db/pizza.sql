@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 01. Sep 2018 um 17:04
+-- Erstellungszeit: 08. Okt 2018 um 22:55
 -- Server-Version: 10.1.26-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.30-0+deb9u1
 
@@ -30,6 +30,31 @@ CREATE TABLE `log` (
   `time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `user` int(11) DEFAULT NULL,
   `text` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `menu`
+--
+
+CREATE TABLE `menu` (
+  `id` int(11) NOT NULL,
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `menuitem`
+--
+
+CREATE TABLE `menuitem` (
+  `menu` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sort` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -133,6 +158,18 @@ ALTER TABLE `log`
   ADD KEY `user` (`user`);
 
 --
+-- Indizes für die Tabelle `menu`
+--
+ALTER TABLE `menu`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `menuitem`
+--
+ALTER TABLE `menuitem`
+  ADD PRIMARY KEY (`menu`,`sort`);
+
+--
 -- Indizes für die Tabelle `orderday`
 --
 ALTER TABLE `orderday`
@@ -181,6 +218,11 @@ ALTER TABLE `user__remember`
 --
 
 --
+-- AUTO_INCREMENT für Tabelle `menu`
+--
+ALTER TABLE `menu`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT für Tabelle `orderday`
 --
 ALTER TABLE `orderday`
@@ -209,6 +251,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `log`
   ADD CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints der Tabelle `menuitem`
+--
+ALTER TABLE `menuitem`
+  ADD CONSTRAINT `menuitem_ibfk_1` FOREIGN KEY (`menu`) REFERENCES `menu` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `orderday`
