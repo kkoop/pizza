@@ -73,13 +73,21 @@ class OrderController extends  Controller
         $this->view->setError("Bestellung von anderem Benutzer");
         return;
       }
-      $this->view->setVars(['title' => "Bestellung bearbeiten", 'order' => $order, 'orderday' => $order->getDay()]);
+      $day = $order->getDay();
+      $this->view->setVars(['title'    => "Bestellung bearbeiten", 
+                            'order'    => $order, 
+                            'orderday' => $day]);
     } else {
       if (!($day = Model\Orderday::read($_REQUEST['day']))) {
         $this->view->setError("Fehler beim Lesen des Bestelltags");
         return;
       }
-      $this->view->setVars(['title' => "Neue Bestellung", 'orderday' => $day]);
+      $this->view->setVars(['title'    => "Neue Bestellung", 
+                            'orderday' => $day]);
+    }
+    if ($menu = Model\Menu::read($day->url)) {
+      $this->view->setVars(['menuitems' => $menu->getItems()]);
     }
   }
 }
+
