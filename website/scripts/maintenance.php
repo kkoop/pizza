@@ -29,6 +29,10 @@ class Maintenance
         \Pizza\Library\Mailer::mail($day->getOrganizer()->login, "Bestellung ist bereit", $msg);
       }
       $day->mailDueSent();
+      // Speisekarte wird nicht mehr benötigt
+      if ($menu = Model\Menu::read($day->url)) {
+        $menu->delete();
+      }
     }
   }
 }
