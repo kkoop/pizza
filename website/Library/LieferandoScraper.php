@@ -18,9 +18,9 @@ class LieferandoScraper extends Scraper
       return false;
     }
     $xpath = new \DOMXpath($dom);
+    Model\Db::beginTransaction();
     $stmtDelete = Model\Db::prepare("DELETE FROM menu WHERE url=:url");
     $stmtDelete->execute([":url" => $this->url]);
-    Model\Db::beginTransaction();
     $stmtInsert = Model\Db::prepare("INSERT INTO menu (url) VALUES (:url)");
     $stmtInsert->execute([":url" => $this->url]);
     $menuId = Model\Db::lastInsertId();
