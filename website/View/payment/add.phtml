@@ -19,18 +19,20 @@ if (isset($successMessage)) {
     </form>
   </div>
   
-  <div class="col-md-6">
+  <div class="col-md-6" id="tblDebts">
 <?php 
     if (count($debts)): ?>
     <h2>Zu zahlen</h2>
 <?php
     foreach ($debts as $debt): ?>
-    <div class="row">
+    <div class="row" data-id="<?=$debt['user']?>" data-amount="<?=$debt['amount']?>">
       <label class="col-xs-8 col-md-4 control-label"><?=htmlspecialchars($debt['name'])?></label>
       <label class="col-xs-4 col-md-2 control-label"><?=sprintf("%.2f", $debt['amount'])?> €</label>
     </div>
 <?php 
-    endforeach; 
+    endforeach; ?>
+    <button type="button" class="btn btn-default" id="btnPrefill">Alle haben bezahlt</button>
+<?php    
     endif; ?>
   </div>
 </div>
@@ -64,4 +66,14 @@ function checkNeededRows() {
 }
 $("#tblPayments").on("keyup","input",checkNeededRows);
 checkNeededRows();
+
+$("#btnPrefill").click(function(e) {
+  $("#tblDebts .row").each(function(i, el) {
+    var $lastRow = $("#tblPayments .row:last-child");
+    $lastRow.find("select[name='user[]']").val($(el).attr("data-id"));
+    $lastRow.find("input[name='amount[]']").val($(el).attr("data-amount"));
+    checkNeededRows();
+  });
+  $(this).off().fadeOut();
+});
 </script>
