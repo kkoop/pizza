@@ -71,7 +71,10 @@ $("#btnPrefill").click(function(e) {
   $("#tblDebts .row").each(function(i, el) {
     var $lastRow = $("#tblPayments .row:last-child");
     $lastRow.find("select[name='user[]']").val($(el).attr("data-id"));
-    $lastRow.find("input[name='amount[]']").val($(el).attr("data-amount"));
+    var $amount = $lastRow.find("input[name='amount[]']");
+    $amount.val($(el).attr("data-amount"));
+    if ($amount.val() == "")
+      $amount.val($(el).attr("data-amount").replace(".", ","));
     checkNeededRows();
   });
   $(this).off().fadeOut();
