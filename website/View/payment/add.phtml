@@ -48,7 +48,7 @@ function checkNeededRows() {
           <select class="form-control" name="user[]"><option value=""></option>
 <?php
             foreach ($users as $user) {
-              printf('<option value="%d">%s</option>', $user->id, $user->name);
+              printf('<option value="%d">%s</option>', $user->id, htmlspecialchars($user->name));
             }
 ?>
           </select>

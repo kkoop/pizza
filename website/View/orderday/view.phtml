@@ -1,7 +1,11 @@
 <div class="container" id="divMain">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3>Bestellungen <?=strftime("%x %X", $orderday->time)?></h3>
+      <h3>Bestellungen <?=strftime("%x %X", $orderday->time)?>
+<?php if ($showBtnEdit): ?>
+        <a href="<?=K_BASE_URL?>/orderday/edit/?id=<?=$orderday->id?>" class="pull-right"><span class="glyphicon glyphicon-pencil"></span></a>
+<?php endif; ?>
+      </h3>
       <div class="row">
         <label class="col-sm-2 col-xs-4 control-label">Organisator:</label>
         <div class="col-sm-4 col-xs-8"><?=htmlspecialchars($orderday->getOrganizer()->name)?></div>

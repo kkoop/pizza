@@ -21,6 +21,7 @@ class OrderdayController extends Controller
     $this->view->setVars(['orderday'          => $day,
                           'orders'            => $day->getOrders(),
                           'showBtnAdd'        => $day->time > time(),
+                          'showBtnEdit'       => $day->organizer == $_SESSION['user']->id,
                           'showBtnOrderReady' => $day->time < time() && $day->time+86400 > time() 
                                              && !$day->mailready && $day->organizer==$_SESSION['user']->id]);
   }
@@ -56,6 +57,46 @@ class OrderdayController extends Controller
       header("Location: ".K_BASE_URL."/orderday/view/?id={$day->id}");
       exit(0);
     }
+  }
+  
+  public function editAction()
+  {
+    $this->view->setVars(['title' => "Bestellungen"]);
+    if (!($day = Model\Orderday::read($_REQUEST['id']))) {
+      $this->view->setError("Fehler beim Lesen des Bestelltages");
+      return;
+    }
+    if ($day->organizer != $_SESSION['user']->id) {
+      $this->view->setError("Nur der Ersteller kann bearbeiten.");
+      return;
+    }
+    if (isset($_POST['time'])) {
+      $day->time = $_POST['time'];
+      $day->deliveryservice = $_POST['deliveryService'];
+      $day->url = $_POST['deliveryServiceUrl'];
+      $newOrganizer = $day->organizer != $_POST['organizer'];
+      $day->organizer = $_POST['organizer'];
+      if (!$day->write()) {
+        $this->view->setError("Fehler beim Schreiben der Änderungen");
+        exit(1);
+      }
+      if ($newOrganizer) {
+        $url = "/";
+        if (isset($_SERVER['SERVER_NAME'])) {
+          $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
+        }
+        \Pizza\Library\Mailer::mail($day->getOrganizer()->login, 
+          "Gemeinsame Bestellung übertragen", 
+          sprintf("Hallo,\r\n\r\ndu wurdest als Organisator für eine gemeinsame Bestellung eingetragen.\r\n".
+            "Unter %s kannst du die Bestellung ansehen und bearbeiten.\r\n".
+            "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+            "$url/orderday/view/?id=".$day->id),
+          strtotime($_POST['time']));
+      }
+      header("Location: ".K_BASE_URL."/orderday/view/?id={$day->id}");
+      exit(0);
+    }
+    $this->view->setVars(["day" => $day, "users" => Model\User::readAll()]);
   }
   
   public function readyMailAjax()

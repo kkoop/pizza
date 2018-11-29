@@ -62,6 +62,22 @@ class Orderday
     }
     return null;
   }
+  
+  public function write()
+  {
+    $stmt = Db::prepare("UPDATE orderday SET time=:time,organizer=:user,deliveryservice=:service,url=:url 
+      WHERE id=:id");
+    if ($stmt->execute(['time'     => $this->time,
+                        ':user'    => $this->organizer,
+                        ':service' => $this->deliveryservice,
+                        ':url'     => $this->url,
+                        ':id'      => $this->id]))
+    {
+      Log::info("edited orderday {$this->id}");
+      return true;
+    }
+    return false;
+  }
 
   public function getOrders()
   {
