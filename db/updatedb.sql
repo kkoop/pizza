@@ -24,3 +24,14 @@ CREATE TABLE IF NOT EXISTS `menuitem` (
   PRIMARY KEY (`menu`,`sort`),
   CONSTRAINT `menuitem_ibfk_1` FOREIGN KEY (`menu`) REFERENCES `menu` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `upload` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `user` int(11) NOT NULL,
+ `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+ `created` timestamp NULL DEFAULT NULL,
+ `expiry` timestamp NULL DEFAULT NULL,
+ PRIMARY KEY (`id`),
+ KEY `user` (`user`),
+ CONSTRAINT `upload_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

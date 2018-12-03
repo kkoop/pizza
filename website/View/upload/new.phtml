@@ -1,0 +1,43 @@
+<div class="container">
+  <h1>Datei hochladen</h1>
+  <form class="form-horizontal" method="post" enctype="multipart/form-data">
+    <div class="row form-group">
+      <label class="control-label col-sm-2">Titel:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="title" autofocus required>
+      </div>
+    </div>
+    <div class="row form-group">
+      <label class="control-label col-sm-2">Datei:</label>
+      <div class="col-sm-6">
+        <div class="input-group">
+          <label class="input-group-btn">
+            <span class="btn btn-primary">Durchsuchen&hellip; 
+              <input type="file" name="file" style="display: none">
+            </span>
+          </label>
+          <input type="text" class="form-control" readonly name="filename">
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <label class="control-label col-sm-2">Ablaufdatum:</label>
+      <div class="col-sm-4">
+        <input type="date" class="form-control" name="expiry">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-sm-2 col-sm-offset-2">
+        <button type="submit" class="btn btn-primary" disabled>Senden</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+$("form").on("change", ":file", function(e) {
+  var parent = $(e.target).closest("form");
+  parent.find("input[name='filename']").val(e.target.files[0].name);
+  parent.find(":submit").prop("disabled", false);
+});
+</script>

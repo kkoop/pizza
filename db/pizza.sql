@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 08. Okt 2018 um 22:55
--- Server-Version: 10.1.26-MariaDB-0+deb9u1
+-- Erstellungszeit: 03. Dez 2018 um 22:50
+-- Server-Version: 10.1.37-MariaDB-0+deb9u1
 -- PHP-Version: 7.0.30-0+deb9u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -105,6 +105,22 @@ CREATE TABLE `payment` (
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `upload`
+--
+
+CREATE TABLE `upload` (
+  `id` int(11) NOT NULL,
+  `user` int(11) NOT NULL,
+  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` mediumblob NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `expiry` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `user`
 --
 
@@ -193,6 +209,13 @@ ALTER TABLE `payment`
   ADD KEY `fromuser` (`fromuser`) USING BTREE;
 
 --
+-- Indizes für die Tabelle `upload`
+--
+ALTER TABLE `upload`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user` (`user`);
+
+--
 -- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
@@ -238,6 +261,11 @@ ALTER TABLE `ordering`
 ALTER TABLE `payment`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT für Tabelle `upload`
+--
+ALTER TABLE `upload`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
@@ -277,6 +305,12 @@ ALTER TABLE `ordering`
 ALTER TABLE `payment`
   ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`fromuser`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`touser`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints der Tabelle `upload`
+--
+ALTER TABLE `upload`
+  ADD CONSTRAINT `upload_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `user__passwordreset`

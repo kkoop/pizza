@@ -1,0 +1,24 @@
+<div class="container">
+  <h1>Dateien</h1>
+  <table class="table table-striped">
+    <thead><tr><th>Datei</th><th>Hochgeladen</th><th>von</th><th/></tr></thead>
+    <tbody>
+<?php foreach ($files as $file) {
+        if ($file->user == $_SESSION['user']->id) 
+          $deleteBtn = sprintf('<a href="%s/upload/delete/?id=%d" class="pull-right"><i class="glyphicon glyphicon-trash"></i></a>',
+            K_BASE_URL,
+            $file->id);
+        else
+          $deleteBtn = '';
+        printf('<tr><td><a href="%s/upload/file/?id=%d">%s</a></td><td>%s</td><td>%s</td><td>%s</td></tr>',
+          K_BASE_URL, 
+          $file->id,
+          htmlspecialchars($file->title),
+          strftime("%X", $file->created),
+          htmlspecialchars($file->userName),
+          $deleteBtn);
+      } ?>
+    </tbody>
+  </table>
+  <a href="<?=K_BASE_URL?>/upload/new" class="btn btn-primary">Neu</a>
+</div>
