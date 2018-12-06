@@ -35,6 +35,9 @@ class File
   
   public static function create($title, $tmp_file, $mime, $expiry)
   {
+    // bei dieser Gelegenheit aufräumen
+    self::deleteOld();
+
     if ($expiry == '')
       $expiry = NULL;
     $stmt = Db::prepare("INSERT INTO upload (user,title,mime,content,expiry) 
@@ -47,7 +50,12 @@ class File
       return Db::lastInsertId();
     return null;
   }
-
+  
+  public static function deleteOld()
+  {
+    Db::query("DELETE FROM upload WHERE DATE(upload.expiry)<DATE(NOW())");
+  }
+  
   public function getBlob(&$mime)
   { 
     $stmt = Db::prepare("SELECT mime,content FROM upload WHERE id=:id");
