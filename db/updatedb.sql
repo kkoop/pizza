@@ -37,3 +37,6 @@ CREATE TABLE IF NOT EXISTS `upload` (
  KEY `user` (`user`),
  CONSTRAINT `upload_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE user ADD COLUMN IF NOT EXISTS
+  notify_newfile BOOLEAN NOT NULL DEFAULT FALSE;

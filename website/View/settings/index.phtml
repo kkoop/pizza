@@ -30,6 +30,10 @@ endif; ?>
           <input type="checkbox" name="notify_orderready" <?=$user->notify_orderready ? "checked" : ""?> value="1">
           die gemeinsame Bestellung geliefert wurde
         </label></div>
+        <div class="checkbox"><label>
+          <input type="checkbox" name="notify_newfile" <?=$user->notify_newfile ? "checked" : ""?> value="1">
+          eine Datei hochgeladen wurde
+        </label></div>
         <button type="submit" class="btn btn-primary">Speichern</button>
       </form>
     </div>

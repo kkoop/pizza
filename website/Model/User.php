@@ -15,6 +15,7 @@ class User
   public $notify_neworder;
   public $notfiy_orderdue;
   public $notfiy_orderready;
+  public $notify_newfile;
 
   public function __construct()
   {
@@ -328,12 +329,13 @@ class User
  */
   public function writeSettings()
   {
-    $stmt = Db::prepare("UPDATE user SET notify_neworder=:neworder,notify_orderdue=:due,notify_orderready=:ready ".
+    $stmt = Db::prepare("UPDATE user SET notify_neworder=:neworder,notify_orderdue=:due,notify_orderready=:ready,notify_newfile=:file ".
       "WHERE id=:id");
     return $stmt->execute([":id"        => $this->id, 
                            ":neworder"  => $this->notify_neworder,
                            ":due"       => $this->notify_orderdue,
-                           ":ready"     => $this->notify_orderready]);
+                           ":ready"     => $this->notify_orderready,
+                           ":file"      => $this->notify_newfile]);
   }
   
 /**
