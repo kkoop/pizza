@@ -36,7 +36,7 @@
             printf('<tr><th>%s</th>', $userMap[$id]);
             foreach ($row as $user=>$amount)
               if ($user != $id)
-                printf('<td>%.2f €</td>', $amount);
+                printf('<td %s>%.2f €</td>', $amount==0 ? 'class="text-muted"' : "", $amount);
               else
                 echo('<td/>');
             echo('</tr>');
@@ -53,7 +53,7 @@
             printf('<tr><th>%s</th>', $userMap[$id]);
             foreach ($row as $user=>$amount)
               if ($user != $id)
-                printf('<td>%.2f €</td>', $amount);
+                printf('<td %s>%.2f €</td>', $amount==0 ? 'class="text-muted"' : "", $amount);
               else
                 echo('<td/>');
             echo('</tr>');
