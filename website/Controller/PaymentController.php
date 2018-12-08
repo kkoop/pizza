@@ -16,7 +16,7 @@ class PaymentController extends  Controller
       $startTime = strtotime("-1 month");
       $endTime   = time();
     }
-    $payments = Model\Payment::getForUser($startTime, $endTime);
+    $payments = Model\Payment::readAll($startTime, $endTime, $_SESSION['user']->id);
     $orders = Model\Orderday::readAll($startTime, $endTime);
     $orders = array_filter($orders, function($o) { return $o->organizer==$_SESSION['user']->id;});
     $transactions = array_merge($payments, $orders);
@@ -136,5 +136,54 @@ class PaymentController extends  Controller
       });
       $this->view->setVars(['users' => $users]);
     }
+  }
+  
+  public function adminAction()
+  {
+    if (!$_SESSION['user']->isAdmin()) {
+      $this->view->setError("keine Rechte");
+      return;
+    }
+    $this->view->setTitle("Zahlungen");
+    if (!empty($_REQUEST['startDate'])) {
+      $startTime = strtotime($_REQUEST['startDate']);
+      $endTime   = strtotime($_REQUEST['endDate']." 23:59:59");
+      if (!($endTime > $startTime))
+        $endTime = time();
+    } else {
+      $startTime = strtotime("-1 month");
+      $endTime   = time();
+    }
+    $users = Model\User::readAll();
+    $payments = Model\Payment::readAll($startTime, $endTime, null);
+    // bezahlte Beträge als Matrix
+    $userMatrix = [];
+    $userMap = [];
+    foreach ($users as $user) {
+      $userMap[$user->id] = $user->name;
+      $userMatrix[$user->id] = [];
+      foreach ($users as $user2) {
+        $userMatrix[$user->id][$user2->id] = 0;
+      }
+    }
+    $paymentMatrix = $userMatrix;
+    foreach ($payments as $payment) {
+      $paymentMatrix[$payment->fromId][$payment->toId] += $payment->amount;
+    }
+    // zu zahlende Beträge als Matrix
+    $orderMatrix = $userMatrix;
+    $orderDays = Model\Orderday::readAll($startTime, $endTime);
+    foreach ($orderDays as $day) {
+      foreach ($day->getOrders() as $order) {
+        if ($order->getUser()->id != $day->organizer)
+          $orderMatrix[$order->getUser()->id][$day->organizer] += $order->price;
+      }
+    }
+    $this->view->setVars(['startDate'     => strftime("%Y-%m-%d", $startTime),
+                          'endDate'       => strftime("%Y-%m-%d", $endTime),
+                          'payments'      => $payments,
+                          'userMap'       => $userMap,
+                          'paymentMatrix' => $paymentMatrix,
+                          'orderMatrix'   => $orderMatrix]);
   }
 }

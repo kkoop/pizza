@@ -14,11 +14,17 @@ class View
   public function setError($errorMsg)
   {
     $this->errorMsg = $errorMsg;
+    $this->setTitle("Fehler");
   }
 
   public function setVars(array $vars)
   {
     $this->vars = array_merge($this->vars, $vars);
+  }
+  
+  public function setTitle($title)
+  {
+    $this->vars['title'] = $title;
   }
 
   public function render($controllerName, $actionName)
