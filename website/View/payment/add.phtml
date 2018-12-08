@@ -25,7 +25,7 @@ if (isset($successMessage)) {
     <h2>Zu zahlen</h2>
 <?php
     foreach ($debts as $debt): ?>
-    <div class="row" data-id="<?=$debt['user']?>" data-amount="<?=json_encode($debt['amount'])?>">
+    <div class="row" data-id="<?=$debt['user']?>" data-amount="<?=json_encode($debt['amount'], JSON_NUMERIC_CHECK )?>">
       <label class="col-xs-8 col-md-4 control-label"><?=htmlspecialchars($debt['name'])?></label>
       <label class="col-xs-4 col-md-2 control-label"><?=sprintf("%.2f", $debt['amount'])?> €</label>
     </div>
