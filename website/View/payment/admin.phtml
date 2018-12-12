@@ -59,6 +59,27 @@
             echo('</tr>');
           } ?>
       </table>
+      
+      <h2>Offene Beträge zwischen Benutzern</h2>
+      <small>Negative Beträge sind Schulden, positive Beträge Guthaben</small>
+      <table class="table">
+        <thead><tr><th/>
+<?php     foreach ($userMap as $user=>$name)
+            printf('<th>%s</th>', htmlspecialchars($name)); ?>
+        </tr></thead>
+<?php     foreach ($userMap as $user1=>$name1) { 
+            printf('<tr><th>%s</th>', $name1);
+            foreach ($userMap  as $user2=>$name2)
+              if ($user1 != $user2) {
+                $diff = $paymentMatrix[$user1][$user2] - $orderMatrix[$user1][$user2]
+                  - $paymentMatrix[$user2][$user1] + $orderMatrix[$user2][$user1];
+                printf('<td class="%s">%.2f €</td>', $diff==0 ? 'text-muted' : $diff < 0 ? 'negative' : 'positive', $diff);
+              } else {
+                echo('<td/>');
+              }
+            echo('</tr>');
+          } ?>
+      </table>
     </div>
   </div>
 </div>
