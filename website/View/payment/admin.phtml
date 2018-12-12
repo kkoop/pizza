@@ -73,7 +73,7 @@
               if ($user1 != $user2) {
                 $diff = $paymentMatrix[$user1][$user2] - $orderMatrix[$user1][$user2]
                   - $paymentMatrix[$user2][$user1] + $orderMatrix[$user2][$user1];
-                printf('<td class="%s">%.2f €</td>', $diff==0 ? 'text-muted' : $diff < 0 ? 'negative' : 'positive', $diff);
+                printf('<td class="%s">%.2f €</td>', abs($diff)<0.01 ? 'text-muted' : ($diff < 0 ? 'negative' : 'positive'), $diff);
               } else {
                 echo('<td/>');
               }
