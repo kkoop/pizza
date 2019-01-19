@@ -36,9 +36,11 @@
         </div>
         <div class="row">
           <div class="col-sm-9 col-sm-offset-3">
-            <button type="submit" class="btn btn-primary">Bestellen</button>
 <?php       if (isset($order)): ?>
+              <button type="submit" class="btn btn-primary">Speichern</button>
               <button type="submit" class="btn btn-default" name="delete" value="t">Löschen</button>
+<?php else: ?>
+              <button type="submit" class="btn btn-primary">Bestellen</button>
 <?php       endif; 
             if (!empty($menuitems)): ?>
               <button type="button" class="btn btn-default" id="btnMenu">Speisekarte</button>

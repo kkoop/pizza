@@ -17,13 +17,25 @@ class OrderController extends  Controller
         $this->view->setError("Fehler beim Lesen der Bestellung");
         return;
       }
-      if ($order->getUser()->id != $_SESSION['user']->id) {
+      $day = $order->getDay();
+      $orderUser = $order->getUser();
+      if ($orderUser->id != $_SESSION['user']->id && $day->organizer != $_SESSION['user']->id) {
         $this->view->setError("Bestellung von anderem Benutzer");
         return;
       }
-      if ($order->getDay()->time < time()) {
+      if ($order->getDay()->time < time() && $day->organizer != $_SESSION['user']->id) {  // Organisator darf nachträglich ändern
         $this->view->setError("Abgelaufene Bestellung kann nicht geändert werden");
         return;
+      }
+      if ($orderUser->id != $_SESSION['user']->id) {
+        // betroffenen Benutzer über die Änderung benachrichtigen
+        $url = "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
+        \Pizza\Library\Mailer::mail($orderUser->login, 
+          "Änderung an deiner Bestellung",
+          sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s wurde durch den Organisator %s gelöscht.\r\n".
+                  "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+                  "$url/orderday/view/?id=".$day->id,
+                  $_SESSION['user']->name));
       }
       $order->delete();
       header("Location: ".K_BASE_URL."/orderday/view/?id={$order->day}");
@@ -35,11 +47,13 @@ class OrderController extends  Controller
           $this->view->setError("Fehler beim Lesen der Bestellung");
           return;
         }
-        if ($order->getUser()->id != $_SESSION['user']->id) {
+        $day = $order->getDay();
+        $orderUser = $order->getUser();
+        if ($orderUser->id != $_SESSION['user']->id && $day->organizer != $_SESSION['user']->id) {
           $this->view->setError("Bestellung von anderem Benutzer");
           return;
         }
-        if ($order->getDay()->time < time()) {
+        if ($order->getDay()->time < time() && $day->organizer != $_SESSION['user']->id) {  // Organisator darf nachträglich ändern
           $this->view->setError("Abgelaufene Bestellung kann nicht geändert werden");
           return;
         }
@@ -47,6 +61,16 @@ class OrderController extends  Controller
         $order->comment = $_POST['comment'];
         $order->price   = $_POST['price'];
         $order->update();
+        if ($orderUser->id != $_SESSION['user']->id) {
+          // betroffenen Benutzer über die Änderung benachrichtigen
+          $url = "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
+          \Pizza\Library\Mailer::mail($orderUser->login, 
+            "Änderung an deiner Bestellung",
+            sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s wurde durch den Organisator %s bearbeitet.\r\n".
+                    "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+                    "$url/orderday/view/?id=".$day->id,
+                    $_SESSION['user']->name));
+        }
         header("Location: ".K_BASE_URL."/orderday/view/?id={$order->day}");
         exit(0);
       } else {
@@ -69,11 +93,11 @@ class OrderController extends  Controller
         $this->view->setError("Fehler beim Lesen der Bestellung");
         return;
       }
-      if ($order->getUser()->id != $_SESSION['user']->id) {
+      $day = $order->getDay();
+      if ($order->getUser()->id != $_SESSION['user']->id && $day->organizer != $_SESSION['user']->id) {
         $this->view->setError("Bestellung von anderem Benutzer");
         return;
       }
-      $day = $order->getDay();
       $this->view->setVars(['title'    => "Bestellung bearbeiten", 
                             'order'    => $order, 
                             'orderday' => $day]);

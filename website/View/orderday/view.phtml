@@ -26,7 +26,7 @@
       $ownOrder = false;
       $sum = 0.0;
       foreach ($orders as $order) {
-        if ($order->getUser()->id == $_SESSION['user']->id && $orderday->time > time()) {
+        if ($orderday->organizer == $_SESSION['user']->id || ($order->getUser()->id == $_SESSION['user']->id && $orderday->time > time())) {
           $ownOrder = true;
           $editLink = sprintf('<a href="%s/order/edit/?id=%d"><span class="glyphicon glyphicon-pencil"></span></a>',
             K_BASE_URL,
