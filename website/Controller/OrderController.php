@@ -57,16 +57,19 @@ class OrderController extends  Controller
           $this->view->setError("Abgelaufene Bestellung kann nicht geändert werden");
           return;
         }
+        $before = sprintf("%s (%s) %.2f €", $order->product, $order->comment, $order->price);
         $order->product = $_POST['product'];
         $order->comment = $_POST['comment'];
         $order->price   = $_POST['price'];
         $order->update();
+        $after = sprintf("%s (%s) %.2f €", $order->product, $order->comment, $order->price);
         if ($orderUser->id != $_SESSION['user']->id) {
           // betroffenen Benutzer über die Änderung benachrichtigen
           $url = "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
           \Pizza\Library\Mailer::mail($orderUser->login, 
             "Änderung an deiner Bestellung",
             sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s wurde durch den Organisator %s bearbeitet.\r\n".
+                    "Vorher: $before\r\nJetzt: $after\r\n\r\n".
                     "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
                     "$url/orderday/view/?id=".$day->id,
                     $_SESSION['user']->name));
