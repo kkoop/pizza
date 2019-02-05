@@ -19,7 +19,8 @@ class Maintenance
       if ($day->getOrganizer()->notify_orderdue) {
         $msg = "Hallo,\r\n\r\ndie Bestellzeit der gemeinsamen Bestellung ist erreicht. Folgende Bestellungen liegen vor:\r\n";
         foreach ($day->getOrders() as $order) {
-          $msg .= sprintf("* %s%s, %.2f€\r\n", 
+          $msg .= sprintf("* %s: %s%s, %.2f€\r\n",
+                          $order->getUser()->name,
                           $order->product, 
                           !empty($order->comment) ? " ({$order->comment})" : "", 
                           $order->price);

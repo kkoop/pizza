@@ -9,6 +9,7 @@ class User
 {
   public $id;
   public $login;
+  public $name;
   public $rights;
   public $disabled;
   // Einstellungen:
