@@ -98,7 +98,33 @@ class OrderdayController extends Controller
     }
     $this->view->setVars(["day" => $day, "users" => Model\User::readAll()]);
   }
-  
+
+  public function deleteAjax()
+  {
+    if (!($day = Model\Orderday::read($_REQUEST['id']))) {
+      $this->view->setError("Fehler beim Lesen des Bestelltages");
+      return;
+    }
+    if ($day->organizer != $_SESSION['user']->id) {
+      $this->view->setError("Nur der Ersteller kann löschen.");
+      return;
+    }
+    // Besteller informieren
+    $users = [];  // jeder soll nur eine Mail bekommen, auch bei mehreren Bestellungen
+    foreach ($day->getOrders() as $order) {
+      $user = $order->getUser();
+      if ($user->id != $_SESSION['user']->id)
+        $users[$user->id] = $user;
+    }
+    foreach ($users as $user) {
+      \Pizza\Library\Mailer::mail($user->login, "Bestellung gelöscht", 
+        "Hallo,\r\n\r\ndie gemeinsame Bestellung wurde durch den Organisator gelöscht.\r\n".
+          "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+        strtotime("+1 hour"));
+    }
+    $day->delete();
+  }
+
   public function readyMailAjax()
   {
     $day = Model\Orderday::read($_REQUEST['id']);

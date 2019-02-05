@@ -79,6 +79,13 @@ class Orderday
     return false;
   }
 
+  public function delete()
+  {
+    Log::info("deleted orderday {$this->id}");
+    $stmt = Db::prepare("DELETE FROM orderday WHERE id=:id");
+    return $stmt->execute([':id'=>$this->id]) && $stmt->rowCount() > 0;
+  }
+
   public function getOrders()
   {
     return Order::getAllForDay($this->id);

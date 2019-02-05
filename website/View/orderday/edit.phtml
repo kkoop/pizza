@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="divMain">
   <h1>Bestelltag bearbeiten</h1>
   <form class="form-horizontal" action="<?=K_BASE_URL?>/orderday/edit" method="post">
     <input type="hidden" name="id" value="<?=$day->id?>">
@@ -24,7 +24,10 @@
       </select></div>
     </div>
     <div class="row">
-      <div class="col-sm-4 col-sm-offset-2"><button type="submit" class="btn btn-primary">Speichern</button></div>
+      <div class="col-sm-4 col-sm-offset-2">
+        <button type="submit" class="btn btn-primary">Speichern</button>
+        <button type="button" class="btn btn-default" id="btnDelete">Löschen</button>
+      </div>
     </div>
   </form>
 </div>
@@ -38,5 +41,23 @@ $("#inputTime").datetimepicker({
 $(function() { $("#inputTime").data("DateTimePicker").date(moment().hours(11).minutes(30)); });
 $("form").submit(function(e) {
   $("#inputTime").data("DateTimePicker").format('YYYY-MM-DD HH:mm');
+});
+
+$("#btnDelete").click(function() {
+  if (confirm("Wirklich gesamten Bestelltag löschen?")) {
+    $.ajax("<?=K_BASE_URL?>/ajax/orderday/delete/?id=<?=$day->id?>")
+      .done(function(data) {
+        if (data['result'] == 'success') {
+          window.location="<?=K_BASE_URL?>";
+        } else {
+          $('#divMain').prepend('<div class="alert alert-danger alert-dismissable fade in">Fehler beim Löschen (' + _.escape(data['error']) + ').'+
+            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>');
+        }
+      })
+      .fail(function(jqXHR, status, error) {
+        $('#divMain').prepend('<div class="alert alert-danger alert-dismissable fade in">Fehler beim Löschen (' + _.escape(error) + ').'+
+          '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>');
+      });
+  }
 });
 </script>
