@@ -97,7 +97,7 @@ class OrderController extends  Controller
         return;
       }
       $day = $order->getDay();
-      if ($order->getUser()->id != $_SESSION['user']->id && $day->organizer != $_SESSION['user']->id) {
+      if ($order->user != $_SESSION['user']->id && $day->organizer != $_SESSION['user']->id) {
         $this->view->setError("Bestellung von anderem Benutzer");
         return;
       }

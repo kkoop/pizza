@@ -175,8 +175,8 @@ class PaymentController extends  Controller
     $orderDays = Model\Orderday::readAll($startTime, $endTime);
     foreach ($orderDays as $day) {
       foreach ($day->getOrders() as $order) {
-        if ($order->getUser()->id != $day->organizer)
-          $orderMatrix[$order->getUser()->id][$day->organizer] += $order->price;
+        if ($order->user != $day->organizer)
+          $orderMatrix[$order->user][$day->organizer] += $order->price;
       }
     }
     $this->view->setVars(['startDate'     => strftime("%Y-%m-%d", $startTime),

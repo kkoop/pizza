@@ -23,11 +23,9 @@
     <div class="panel-body">
       <ul class="list-group">
 <?php 
-      $ownOrder = false;
       $sum = 0.0;
       foreach ($orders as $order) {
-        if ($orderday->organizer == $_SESSION['user']->id || ($order->getUser()->id == $_SESSION['user']->id && $orderday->time > time())) {
-          $ownOrder = true;
+        if ($orderday->organizer == $_SESSION['user']->id || ($order->user == $_SESSION['user']->id && $orderday->time > time())) {
           $editLink = sprintf('<a href="%s/order/edit/?id=%d"><span class="glyphicon glyphicon-pencil"></span></a>',
             K_BASE_URL,
             $order->id);
@@ -61,7 +59,7 @@
 </div>
 
 <script>
-<?php if ($ownOrder): ?>
+<?php if (in_array($_SESSION['user']->id, array_column($orders, 'user'))): ?>
 $("#lnkAddOrder").click(function(e) {
   return confirm("Sie haben schon etwas bestellt. Möchten Sie trotzdem eine weitere Bestellung hinzufügen?");
 });

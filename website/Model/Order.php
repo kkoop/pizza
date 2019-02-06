@@ -5,7 +5,7 @@ class Order
 {
   public $id;
   public $day;
-  private $user;
+  public $user;
   private $userObj;
   public $product;
   public $comment;
