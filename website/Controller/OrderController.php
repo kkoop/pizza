@@ -5,10 +5,9 @@ use Pizza\Model;
 class OrderController extends  Controller
 {
   public function indexAction()
-  { 
-    
+  {
   }
-  
+
   public function editAction()
   {
     if (isset($_POST['delete'])) {
@@ -109,8 +108,10 @@ class OrderController extends  Controller
         $this->view->setError("Fehler beim Lesen des Bestelltags");
         return;
       }
-      $this->view->setVars(['title'    => "Neue Bestellung", 
-                            'orderday' => $day]);
+      $this->view->setVars(['title'           => "Neue Bestellung", 
+                            'orderday'        => $day,
+                            'ownFavourites'   => Model\Recommendation::getOwnFavourites($day),
+                            'allFavourites'   => Model\Recommendation::getAllFavourites($day)]);
     }
     if ($menu = Model\Menu::read($day->url)) {
       $this->view->setVars(['menuitems' => $menu->getItems()]);

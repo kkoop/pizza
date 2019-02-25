@@ -44,6 +44,9 @@
 <?php       endif; 
             if (!empty($menuitems)): ?>
               <button type="button" class="btn btn-default" id="btnMenu">Speisekarte</button>
+<?php       endif;
+            if (!empty($ownFavourites) || !empty($allFavourites)): ?>
+              <button type="button" class="btn btn-default" id="btnRecommend">Empfehlungen</button>
 <?php       endif; ?>
             
           </div>
@@ -86,6 +89,52 @@ $('#modalMenu').on('click', 'tr', function(e) {
   $('input[name="price"]').val(parseFloat($(this).find("td:nth-child(2)").text().replace(",", ".")));
 });
 </script>
+<?php
+endif; 
+
+if (!empty($ownFavourites) || !empty($allFavourites)): ?>
+
+<div id="modalRecommendations" class="modal fade" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header panel-heading">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Favoriten</h4>
+      </div>
+      <div class="modal-body">
+        <h4>Eigene Favoriten</h4>
+        <table class="table table-striped">
+<?php   foreach ($ownFavourites as $fav) {
+          printf('<tr role="button"><td>%s</td><td>%s</td></tr>', 
+            htmlspecialchars($fav->product), 
+            htmlspecialchars($fav->price));
+        } ?>
+        </table>
+        <h4>Favoriten aller Mitbesteller</h4>
+        <table class="table table-striped">
+<?php   foreach ($allFavourites as $fav) {
+          printf('<tr role="button"><td>%s</td><td>%s</td></tr>', 
+            htmlspecialchars($fav->product), 
+            htmlspecialchars($fav->price));
+        } ?>
+        </table>
+      </div>
+<!--      <div class="modal-footer">
+      </div> -->
+    </div>
+  </div>
+</div>
+<script>
+$('#btnRecommend').click(function(e) {
+  $('#modalRecommendations').modal();
+});
+$('#modalRecommendations').on('click', 'tr', function(e) {
+  $('#modalRecommendations').modal('hide');
+  $('input[name="product"]').val($(this).find("td:first").text());
+  $('input[name="price"]').val(parseFloat($(this).find("td:nth-child(2)").text().replace(",", ".")));
+});
+</script>
+
 <?php
 endif; ?>
 
