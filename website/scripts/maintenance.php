@@ -25,8 +25,6 @@ class Maintenance
                           !empty($order->comment) ? " ({$order->comment})" : "", 
                           $order->price);
         }
-        $msg .= "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n";
-
         \Pizza\Library\Mailer::mail($day->getOrganizer()->login, "Bestellung ist bereit", $msg);
       }
       $day->mailDueSent();

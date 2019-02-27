@@ -43,8 +43,7 @@ class UploadController extends  Controller
             \Pizza\Library\Mailer::mail($user->login, 
               "Neue Datei hochgeladen", 
               sprintf("Hallo,\r\n\r\n%s hat eine neue Datei hochgeladen.\r\n".
-                "Unter %s kannst du diese ansehen.\r\n".
-                "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+                "Unter %s kannst du diese ansehen.\r\n",
                 $_SESSION['user']->name,
                 "$url/upload"),
               strtotime($_POST['time']));

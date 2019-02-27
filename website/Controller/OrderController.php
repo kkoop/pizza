@@ -31,8 +31,7 @@ class OrderController extends  Controller
         $url = "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
         \Pizza\Library\Mailer::mail($orderUser->login, 
           "Änderung an deiner Bestellung",
-          sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s wurde durch den Organisator %s gelöscht.\r\n".
-                  "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+          sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s wurde durch den Organisator %s gelöscht.\r\n",
                   "$url/orderday/view/?id=".$day->id,
                   $_SESSION['user']->name));
       }
@@ -68,8 +67,7 @@ class OrderController extends  Controller
           \Pizza\Library\Mailer::mail($orderUser->login, 
             "Änderung an deiner Bestellung",
             sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s wurde durch den Organisator %s bearbeitet.\r\n".
-                    "Vorher: $before\r\nJetzt: $after\r\n\r\n".
-                    "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+                    "Vorher: $before\r\nJetzt: $after\r\n",
                     "$url/orderday/view/?id=".$day->id,
                     $_SESSION['user']->name));
         }

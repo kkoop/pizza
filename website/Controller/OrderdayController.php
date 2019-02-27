@@ -44,8 +44,7 @@ class OrderdayController extends Controller
           \Pizza\Library\Mailer::mail($user->login, 
             "Neue gemeinsame Bestellung", 
             sprintf("Hallo,\r\n\r\neine neue gemeinsame Bestellung wurde angelegt.\r\n".
-              "Unter %s kannst du deine Bestellung hinzufügen.\r\n".
-              "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+              "Unter %s kannst du deine Bestellung hinzufügen.\r\n",
               "$url/orderday/view/?id=".$day->id),
             strtotime($_POST['time']));
         }
@@ -88,8 +87,7 @@ class OrderdayController extends Controller
         \Pizza\Library\Mailer::mail($day->getOrganizer()->login, 
           "Gemeinsame Bestellung übertragen", 
           sprintf("Hallo,\r\n\r\ndu wurdest als Organisator für eine gemeinsame Bestellung eingetragen.\r\n".
-            "Unter %s kannst du die Bestellung ansehen und bearbeiten.\r\n".
-            "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+            "Unter %s kannst du die Bestellung ansehen und bearbeiten.\r\n",
             "$url/orderday/view/?id=".$day->id),
           strtotime($_POST['time']));
       }
@@ -118,8 +116,7 @@ class OrderdayController extends Controller
     }
     foreach ($users as $user) {
       \Pizza\Library\Mailer::mail($user->login, "Bestellung gelöscht", 
-        "Hallo,\r\n\r\ndie gemeinsame Bestellung wurde durch den Organisator gelöscht.\r\n".
-          "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+        "Hallo,\r\n\r\ndie gemeinsame Bestellung wurde durch den Organisator gelöscht.\r\n",
         strtotime("+1 hour"));
     }
     $day->delete();
@@ -150,8 +147,7 @@ class OrderdayController extends Controller
     }
     foreach ($users as $user) {
       \Pizza\Library\Mailer::mail($user->login, "Bestellung ist da", 
-        sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s ist angekommen.\r\n".
-                "Dies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n",
+        sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s ist angekommen.\r\n",
               "$url/orderday/view/?id=".$day->id),
         strtotime("+1 hour"));
     }
