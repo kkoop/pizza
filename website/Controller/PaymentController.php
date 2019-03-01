@@ -35,11 +35,9 @@ class PaymentController extends  Controller
                           'transactions' => $transactions,
                           'balance'      => $balance]);
   }
-
-  public function openAction()
+  
+  private function getDebts()
   {
-    $this->view->setVars(['title' => "Offene Beträge"]);
-
     $owedPerUser = Model\Order::getOwedPerUser();           // Schulden anderer Nutzer bei uns
     $owingToUser = Model\Order::getOwingToUser();           // unsere Schulden bei anderen Nutzern
     $paymentsPerUser = Model\Payment::getPayedPerUser();    // Zahlungen anderer Nutzer an uns
@@ -76,8 +74,13 @@ class PaymentController extends  Controller
     $debts = array_filter($debts, function($item) {
       return $item['amount'] != 0.0;
     });
+    return $debts;
+  }
 
-    $this->view->setVars(['debts' => $debts]);
+  public function openAction()
+  {
+    $this->view->setVars(['title' => "Offene Beträge",
+                          'debts' => $this->getDebts()]);
   }
 
   public function addAction()
@@ -100,19 +103,7 @@ class PaymentController extends  Controller
       $users = array_filter($users, function($item) {
         return $item->id != $_SESSION['user']->id;
       });
-      $owedPerUser = Model\Order::getOwedPerUser();
-      $paymentsPerUser = Model\Payment::getPayedPerUser();
-      $debts = array();
-      foreach ($owedPerUser as $owed) {
-        $debts[] = $owed;
-        foreach ($paymentsPerUser as $payed) {
-          if ($payed['user'] == $owed['user']) {
-            $debts[count($debts)-1]['amount'] -= $payed['amount'];
-            break;
-          }
-        }
-      }
-      $debts = array_filter($debts, function($item) {
+      $debts = array_filter($this->getDebts(), function($item) {
         return $item['amount'] > 0;
       });
       $this->view->setVars(['users' => $users, 
