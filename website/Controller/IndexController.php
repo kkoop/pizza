@@ -31,7 +31,7 @@ class IndexController extends Controller
         $_SESSION['user'] = $user;
         if (isset($_POST['rememberme'])) {
           $token = $user->createRememberToken();
-          setcookie("rememberme", $token, time()+60*60*24*120, "", "", false, true);
+          setcookie("rememberme", $token, time()+60*60*24*120, K_BASE_URL, "", false, true);
         }
         if (!empty($_SESSION['redirect'])) {
           $redirect = $_SESSION['redirect'];
@@ -74,7 +74,7 @@ class IndexController extends Controller
     }
     $params = session_get_cookie_params();
     setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-    setcookie("rememberme", '', time() - 42000);
+    setcookie("rememberme", '', time() - 42000, K_BASE_URL);
     session_destroy();
     $_SESSION = array();
   }

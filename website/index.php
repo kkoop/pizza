@@ -4,6 +4,8 @@
  */
 namespace Pizza;
 require_once('autoloader.php');
+if (!file_exists('config.php'))
+  die("No config.php found. Create one by customizing config.php.template.");
 require_once('config.php');
 
 setlocale(LC_ALL, "de_DE.utf8");

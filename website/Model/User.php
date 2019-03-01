@@ -83,7 +83,7 @@ class User
       "INNER JOIN user ON user.id=user__remember.user ".
       "WHERE user__remember.token=:token AND disabled=0 AND user.token IS NULL");
     $stmt->execute(array(":token"=>hash("sha256", $token)));
-    $stmt->setFetchMode(\PDO::FETCH_CLASS, "User");
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, get_class());
     if ($user = $stmt->fetch(\PDO::FETCH_CLASS)) {
       $user->doLogin();
     }
