@@ -6,9 +6,10 @@ class Statistic
   /**
    * @brief Gibt die Bestellungen des Benutzers in absteigender Häufigkeit zurück
    * 
+   * Es wird nur die Top-Fünf zurückgegeben.
    * @return array(product=>count)
    */
-  public static function favouriteOrders()
+  public static function favouriteOrdersUser()
   {
     $stmt = Db::prepare("SELECT product,COUNT(*) FROM ordering ".
       "WHERE user=:user ".
@@ -16,7 +17,21 @@ class Statistic
     $stmt->execute([":user" => $_SESSION['user']->id]);
     return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
   }
-  
+
+  /**
+   * @brief Gibt die Bestellungen aller Benutzer in absteigender Häufigkeit zurück
+   * 
+   * Es wird nur die Top-Fünf zurückgegeben.
+   * @return array(product=>count)
+   */
+  public static function favouriteOrdersAll()
+  {
+    $stmt = Db::prepare("SELECT product,COUNT(*) FROM ordering ".
+      "GROUP BY product ORDER BY COUNT(*) DESC LIMIT 5");
+    $stmt->execute();
+    return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
+  }
+
   /**
    * @brief Gibt Statistiken über verwendete Lieferdienste zurück
    * 
