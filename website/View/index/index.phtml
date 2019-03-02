@@ -1,0 +1,47 @@
+<div class="container">
+<h1><?= K_PRODUCT_NAME ?></h1>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Bestellungen</h3>
+  </div>
+  <div class="panel-body">
+<?php if (!empty($orders)): ?>
+    Es gibt folgende gemeinsame Bestellungen:
+    <ul>
+<?php foreach ($orders as $order): ?>
+      <li>
+        <a href="<?=K_BASE_URL?>/orderday/view/?id=<?=$order->id?>">
+          <?= strftime("%x %X", $order->time) ?> - <?= htmlspecialchars($order->deliveryservice) ?>
+        </a>
+      </li>
+<?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <p>Es gibt zur Zeit keine offenen <a href="<?= K_BASE_URL ?>/orderday">Bestellungen</a>.</p>
+<?php endif; ?>
+  </div>
+</div>
+
+<?php if (!empty($debts)): ?>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Offene Beträge</h3>
+  </div>
+  <div class="panel-body">
+    Folgende Beträge stehen noch aus (positiv: Guthaben, negativ: Schulden beim anderen Benutzer):
+    <ul>
+<?php 
+      foreach ($debts as $debt) {
+        printf('<li>%s: <span %s>%.2f €</span></li>',
+          htmlspecialchars($debt['name']),
+          $debt['amount']<0 ? 'class="negative"' : '',
+          $debt['amount']);
+      }
+?>
+    </ul>
+  </div>
+</div>
+<?php endif; ?>
+
+</div>

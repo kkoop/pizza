@@ -36,51 +36,10 @@ class PaymentController extends  Controller
                           'balance'      => $balance]);
   }
   
-  private function getDebts()
-  {
-    $owedPerUser = Model\Order::getOwedPerUser();           // Schulden anderer Nutzer bei uns
-    $owingToUser = Model\Order::getOwingToUser();           // unsere Schulden bei anderen Nutzern
-    $paymentsPerUser = Model\Payment::getPayedPerUser();    // Zahlungen anderer Nutzer an uns
-    $paymentsToUser = Model\Payment::getPayedToUser();      // Zahlungen an andere Nutzer
-
-    $debts = array(); // Einträge: ['user'=>id, 'name'=>username, 'amount'=>betrag, positiv: wir bekommen Geld]
-    foreach ($owedPerUser as $owed) {
-      $debts[$owed['user']] = $owed;
-    }
-    foreach ($paymentsPerUser as $payed) {
-      if (!isset($debts[$payed['user']])) {
-        $debts[$payed['user']] = $payed;
-        $debts[$payed['user']]['amount'] = -$payed['amount'];
-      } else {
-        $debts[$payed['user']]['amount'] -= $payed['amount'];
-      }
-    }
-    foreach ($owingToUser as $owed) {
-      if (!isset($debts[$owed['user']])) {
-        $debts[$owed['user']] = $owed;
-        $debts[$owed['user']]['amount'] = -$owed['amount'];
-      } else {
-        $debts[$owed['user']]['amount'] -= $owed['amount'];
-      }
-    }
-    foreach ($paymentsToUser as $payed) {
-      if (!isset($debts[$payed['user']])) {
-        $debts[$payed['user']] = $payed;
-      } else {
-        $debts[$payed['user']]['amount'] += $payed['amount'];
-      }
-    }
-    // leere Einträge entfernen
-    $debts = array_filter($debts, function($item) {
-      return $item['amount'] != 0.0;
-    });
-    return $debts;
-  }
-
   public function openAction()
   {
     $this->view->setVars(['title' => "Offene Beträge",
-                          'debts' => $this->getDebts()]);
+                          'debts' => Model\Debt::getDebts()]);
   }
 
   public function addAction()
@@ -103,7 +62,7 @@ class PaymentController extends  Controller
       $users = array_filter($users, function($item) {
         return $item->id != $_SESSION['user']->id;
       });
-      $debts = array_filter($this->getDebts(), function($item) {
+      $debts = array_filter(Model\Debt::getDebts(), function($item) {
         return $item['amount'] > 0;
       });
       $this->view->setVars(['users' => $users, 

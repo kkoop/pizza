@@ -8,18 +8,19 @@ class IndexController extends Controller
 
   public function indexAction()
   {
-    if ($this->isLoggedIn()) {
+    if (!$this->isLoggedIn()) {
       header('Location:'.K_BASE_URL.'/orderday');
-    } else {
-      header('Location:'.K_BASE_URL.'/index/login');
+      exit(0);
     }
-    exit(0);
+    $this->view->setVars(['title'  => "Start",
+                          'orders' => Model\Orderday::readAll(time()),
+                          'debts'  => Model\Debt::getDebts()]);
   }
 
   public function loginAction()
   {
     if ($this->isLoggedIn()) {
-      header('Location:'.K_BASE_URL.'/orderday');
+      header('Location:'.K_BASE_URL);
       exit(0);
     }
     $this->view->setVars(['title' => "Login"]);
