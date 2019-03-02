@@ -9,7 +9,7 @@ class IndexController extends Controller
   public function indexAction()
   {
     if (!$this->isLoggedIn()) {
-      header('Location:'.K_BASE_URL.'/orderday');
+      header('Location:'.K_BASE_URL.'/index/login');
       exit(0);
     }
     $this->view->setVars(['title'  => "Start",
