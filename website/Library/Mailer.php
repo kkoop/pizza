@@ -22,12 +22,13 @@ class Mailer
     self::getInstance()->doMail($to, $subject, $message, $expiry);
   }
 
-  protected function doMail($to, $subject, $message, $expiry)
+  protected function doMail($to, $subject, $message, $expiry=null, $bulk=false)
   {
     mail($to, $subject, $message . K_MAIL_SIGNATURE,
       "From: ".K_MAIL_FROM."\r\n".
       "Content-type: text/plain; charset=utf-8 \r\n".
       ($expiry ? "Expiry-Date: ".date("r", $expiry)."\r\n" : "").
+      ($bulk   ? "Precedence: bulk\r\n" : "").
       "Date: ".date("r (T)")."\r\n");
   }
 }

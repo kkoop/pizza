@@ -46,7 +46,8 @@ class OrderdayController extends Controller
             sprintf("Hallo,\r\n\r\neine neue gemeinsame Bestellung wurde angelegt.\r\n".
               "Unter %s kannst du deine Bestellung hinzufügen.\r\n",
               "$url/orderday/view/?id=".$day->id),
-            strtotime($_POST['time']));
+            strtotime($_POST['time']),
+            true);
         }
       }
       // Speisekarte scrapen
