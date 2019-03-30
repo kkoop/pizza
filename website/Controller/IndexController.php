@@ -12,8 +12,10 @@ class IndexController extends Controller
       header('Location:'.K_BASE_URL.'/index/login');
       exit(0);
     }
+    $today = new \DateTime;
+    $today->setTime(0, 0, 0);
     $this->view->setVars(['title'  => "Start",
-                          'orders' => Model\Orderday::readAll(time()),
+                          'orders' => Model\Orderday::readAll($today->getTimestamp()),
                           'debts'  => Model\Debt::getDebts()]);
   }
 
