@@ -47,13 +47,19 @@ class File
                         ":mime"   => $mime,
                         ":file"   => file_get_contents($tmp_file),
                         ":expiry" => $expiry]))
-      return Db::lastInsertId();
+    {
+      $id = Db::lastInsertId();
+      Log::info(sprintf("uploaded file $id (%d KB)", filesize($tmp_file)/1024));
+      return $id;
+    }
     return null;
   }
   
   public static function deleteOld()
   {
-    Db::query("DELETE FROM upload WHERE DATE(upload.expiry)<DATE(NOW())");
+    $stmt = Db::query("DELETE FROM upload WHERE DATE(upload.expiry)<DATE(NOW())");
+    if ($count = $stmt->rowCount())
+      Log::info("deleted $count old files");
   }
   
   public function getBlob(&$mime)
@@ -70,6 +76,10 @@ class File
   public function delete()
   {
     $stmt = Db::prepare("DELETE FROM upload WHERE id=:id");
-    return $stmt->execute([":id" => $this->id]);
+    if ($stmt->execute([":id" => $this->id])) {
+      Log::info("deleted file {$this->id}");
+      return true;
+    }
+    return false;
   }
 }
