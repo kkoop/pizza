@@ -34,11 +34,11 @@ class Order
     return $stmt->fetch(\PDO::FETCH_CLASS);
   }
   
-  public static function create($dayId, $product, $comment, $price)
+  public static function create($dayId, $product, $comment, $price, $user)
   {
     $stmt = Db::prepare("INSERT INTO ordering (day,user,product,comment,price) VALUES (:day,:user,:product,:comment,:price)");
     $stmt->execute([":day"     => $dayId, 
-                    ":user"    => $_SESSION['user']->id,
+                    ":user"    => $user,
                     ":product" => $product,
                     ":comment" => $comment,
                     ":price"   => $price]);

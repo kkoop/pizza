@@ -47,7 +47,7 @@ class OrderController extends  Controller
         }
         $day = $order->getDay();
         $orderUser = $order->getUser();
-        if ($orderUser->id != $_SESSION['user']->id && $day->organizer != $_SESSION['user']->id) {
+        if ($orderUser->id != $_SESSION['user']->id && (!K_ORGANIZER_CAN_EDIT || $day->organizer != $_SESSION['user']->id)) {
           $this->view->setError("Bestellung von anderem Benutzer");
           return;
         }
@@ -83,7 +83,23 @@ class OrderController extends  Controller
           $this->view->setError("Zu abgelaufener Bestellung kann nichts hinzugefügt werden");
           return;
         }
-        Model\Order::create($day->id, $_POST['product'], $_POST['comment'], $_POST['price']);
+        if (K_ORGANIZER_CAN_ORDER && $day->organizer == $_SESSION['user']->id)
+          $user = $_POST['user'];
+        else
+          $user = $_SESSION['user']->id;
+        Model\Order::create($day->id, $_POST['product'], $_POST['comment'], $_POST['price'], $user);
+        if ($user != $_SESSION['user']->id) {
+          // Bestellung für anderen Benutzer wurde angelegt, betroffenen Benutzer informieren
+          $url = "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
+          $after = sprintf("%s (%s) %.2f €", $_POST['product'], $_POST['comment'], $_POST['price']);
+          \Pizza\Library\Mailer::mail(Model\User::read($user)->login, 
+            "Bestellung in deinem Namen",
+            sprintf("Hallo,\r\n\r\nder Organisator %s hat eine Bestellung in deinem Namen angelegt:\r\n%s.\r\n".
+                    "Diese kannst du unter %s einsehen.\r\n",
+                    $_SESSION['user']->name,
+                    $after,
+                    "$url/orderday/view/?id=".$day->id));
+        }
         header("Location: ".K_BASE_URL."/orderday/view/?id={$day->id}");
         exit(0);
       }
@@ -106,10 +122,12 @@ class OrderController extends  Controller
         $this->view->setError("Fehler beim Lesen des Bestelltags");
         return;
       }
-      $this->view->setVars(['title'           => "Neue Bestellung", 
-                            'orderday'        => $day,
-                            'ownFavourites'   => Model\Recommendation::getOwnFavourites($day),
-                            'allFavourites'   => Model\Recommendation::getAllFavourites($day)]);
+      $this->view->setVars(['title'             => "Neue Bestellung", 
+                            'orderday'          => $day,
+                            'showUserSelection' => K_ORGANIZER_CAN_ORDER && $day->organizer == $_SESSION['user']->id,
+                            'users'             => Model\User::readAll(),
+                            'ownFavourites'     => Model\Recommendation::getOwnFavourites($day),
+                            'allFavourites'     => Model\Recommendation::getAllFavourites($day)]);
     }
     if ($menu = Model\Menu::read($day->url)) {
       $this->view->setVars(['menuitems' => $menu->getItems()]);
