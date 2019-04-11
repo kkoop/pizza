@@ -21,7 +21,7 @@ class PaymentController extends  Controller
     $orders = array_filter($orders, function($o) { return $o->organizer==$_SESSION['user']->id;});
     $transactions = array_merge($payments, $orders);
     usort($transactions, function($a, $b) {
-      return $a->time-$b->time;
+      return -$a->time+$b->time;
     });
     $balance = 0.0;
     foreach ($transactions as $transaction) {
