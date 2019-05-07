@@ -25,10 +25,10 @@ class LieferandoScraper extends Scraper
     $stmtInsert->execute([":url" => $this->url]);
     $menuId = Model\Db::lastInsertId();
     $stmtInsert = Model\Db::prepare("INSERT INTO menuitem (menu,name,price,sort) VALUES (:menu,:name,:price,:sort)");
-    $menuitems = $xpath->query("//div[@class='meal']");
+    $menuitems = $xpath->query("//div[@itemscope]");
     foreach ($menuitems as $sort=>$menuitem) {
-      $nameitems = $xpath->query("descendant::span[@itemprop='name']", $menuitem);
-      $priceitems = $xpath->query("descendant::span[@itemprop='price']", $menuitem);
+      $nameitems = $xpath->query("descendant::*[@itemprop='name']", $menuitem);
+      $priceitems = $xpath->query("descendant::*[@itemprop='price']", $menuitem);
       if ($nameitems->length == 1 && $priceitems->length == 1) {
         $stmtInsert->execute([":menu"  => $menuId, 
                               ":name"  => trim($nameitems[0]->textContent),
