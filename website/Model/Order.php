@@ -79,7 +79,7 @@ class Order
   
   public static function getOwedPerUser()
   {
-    $stmt = Db::prepare("SELECT user.id AS user,user.name AS name,SUM(price) AS amount ".
+    $stmt = Db::prepare("SELECT user.id AS user,user.name AS name,user.paypal,SUM(price) AS amount ".
       "FROM ordering ".
       "JOIN user ON user.id=ordering.user ".
       "JOIN orderday ON orderday.id=ordering.day ".
@@ -91,7 +91,7 @@ class Order
 
   public static function getOwingToUser()
   {
-    $stmt = Db::prepare("SELECT user.id AS user,user.name AS name,SUM(price) AS amount ".
+    $stmt = Db::prepare("SELECT user.id AS user,user.name AS name,user.paypal,SUM(price) AS amount ".
       "FROM ordering ".
       "JOIN orderday ON orderday.id=ordering.day ".
       "JOIN user ON user.id=orderday.organizer ".

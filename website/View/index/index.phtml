@@ -33,10 +33,17 @@
     <ul>
 <?php 
       foreach ($debts as $debt) {
-        printf('<li>%s: <span %s>%.2f €</span></li>',
+        echo('<li>');
+        printf('%s: <span %s>%.2f €</span>',
           htmlspecialchars($debt['name']),
           $debt['amount']<0 ? 'class="negative"' : '',
           $debt['amount']);
+        if ($debt['amount'] < 0 && $debt['paypal'] !== null)
+          printf(' <a href="https://paypal.me/%s/%s" title="per PayPal bezahlen">'.
+                  '<img src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-100px.png" alt="PayPal Logo" style="height:20px"></a>', 
+            $debt['paypal'],
+            number_format(-$debt['amount'], 2, '.', ''));
+        echo('</li>');
       }
 ?>
     </ul>

@@ -12,6 +12,7 @@ class SettingsController extends Controller
       $_SESSION['user']->notify_orderdue    = $_POST['notify_orderdue']   ?? false;
       $_SESSION['user']->notify_orderready  = $_POST['notify_orderready'] ?? false;
       $_SESSION['user']->notify_newfile     = $_POST['notify_newfile']    ?? false;
+      $_SESSION['user']->paypal             = $_POST['paypal']            ?? null;
       if ($_SESSION['user']->writeSettings()) {
         $this->view->setVars(['successMessage' => "Einstellungen gespeichert"]);
       } else {

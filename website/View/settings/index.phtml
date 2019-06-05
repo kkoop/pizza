@@ -34,6 +34,13 @@ endif; ?>
           <input type="checkbox" name="notify_newfile" <?=$user->notify_newfile ? "checked" : ""?> value="1">
           eine Datei hochgeladen wurde
         </label></div>
+        <div class="form-group">
+          <label class="control-label">PayPal</label>
+          <div class="input-group">
+            <span class="input-group-addon">paypal.me/</span>
+            <input type="text" class="form-control" name="paypal" value="<?=htmlspecialchars($user->paypal)?>" placeholder="username">
+          </div>
+        </div>
         <button type="submit" class="btn btn-primary">Speichern</button>
       </form>
     </div>

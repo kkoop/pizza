@@ -44,6 +44,6 @@ class Debt
     $debts = array_filter($debts, function($item) {
       return $item['amount'] != 0.0;
     });
-    return $debts;    
+    return $debts;
   }
 }
