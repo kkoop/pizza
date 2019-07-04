@@ -3,14 +3,14 @@
   <h3>Beliebteste Gerichte</h3>
   <h4>Für angemeldeten Benutzer</h4>
   <table class="table">
-    <tr><th>Gericht</th><th>Anzahl</th></tr>
+    <tr><th>Gericht</th><th style="width:20%">Anzahl</th></tr>
 <?php foreach ($favouritesUser as $name=>$count): ?>
     <tr><td><?=htmlspecialchars($name)?></td><td><?=$count?></td></tr>
 <?php endforeach; ?>
   </table>
   <h4>Für alle Benutzer</h4>
   <table class="table">
-    <tr><th>Gericht</th><th>Anzahl</th></tr>
+    <tr><th>Gericht</th><th style="width:20%">Anzahl</th></tr>
 <?php foreach ($favouritesAll as $name=>$count): ?>
     <tr><td><?=htmlspecialchars($name)?></td><td><?=$count?></td></tr>
 <?php endforeach; ?>
