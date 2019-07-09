@@ -69,8 +69,8 @@ CREATE TABLE `orderday` (
   `organizer` int(11) DEFAULT NULL,
   `deliveryservice` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pizza Paradies',
   `url` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `maildue` tinyint(1) NOT NULL,
-  `mailready` tinyint(1) NOT NULL
+  `maildue` tinyint(1) NOT NULL DEFAULT 0,
+  `mailready` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
