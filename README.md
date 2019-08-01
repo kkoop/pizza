@@ -1,7 +1,7 @@
 # Installation
-Requires Apache, PHP 7, MariaDB (or MySQL). On Debian 9:
+Requires Apache, PHP 7, MariaDB (or MySQL). On Debian:
 ```sh
-$ apt-get install apache2 libapache2-mod-php7.0 mariadb-server php7.0-mysql
+$ apt-get install apache2 libapache2-mod-php mariadb-server php-mysql
 ```
 
 ## Database Setup
