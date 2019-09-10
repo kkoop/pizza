@@ -337,10 +337,10 @@ class User
       SET notify_neworder=:neworder,notify_orderdue=:due,notify_orderready=:ready,notify_newfile=:file,paypal=:paypal
       WHERE id=:id");
     return $stmt->execute([":id"        => $this->id, 
-                           ":neworder"  => $this->notify_neworder,
-                           ":due"       => $this->notify_orderdue,
-                           ":ready"     => $this->notify_orderready,
-                           ":file"      => $this->notify_newfile,
+                           ":neworder"  => $this->notify_neworder ? 1 : 0,
+                           ":due"       => $this->notify_orderdue ? 1 : 0,
+                           ":ready"     => $this->notify_orderready ? 1 : 0,
+                           ":file"      => $this->notify_newfile ? 1 : 0,
                            ":paypal"    => $this->paypal]);
   }
   
