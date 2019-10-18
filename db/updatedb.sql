@@ -43,3 +43,6 @@ CREATE TABLE IF NOT EXISTS `upload` (
 ALTER TABLE `orderday`
   MODIFY COLUMN `maildue` tinyint(1) NOT NULL DEFAULT 0,
   MODIFY COLUMN `mailready` tinyint(1) NOT NULL DEFAULT 0;
+
+ALTER TABLE `user`
+  MODIFY COLUMN `password` char(60) COLLATE utf8mb4_unicode_ci NULL;

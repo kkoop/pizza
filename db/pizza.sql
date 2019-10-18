@@ -128,7 +128,7 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `login` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` char(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` char(60) COLLATE utf8mb4_unicode_ci NULL,
   `token` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rights` char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'RW',
   `disabled` tinyint(1) NOT NULL DEFAULT '0',
