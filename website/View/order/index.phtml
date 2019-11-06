@@ -1,0 +1,15 @@
+<div class="container">
+  <h2>Meine Bestellungen</h1>
+  <ul class="list-group">
+<?php 
+    foreach ($orders as $order) {
+      printf('<li class="list-group-item"><label>%s</label>, %s: %s <i>%s</i><span class="badge">%.2f €</span></li>',
+        strftime("%x", $order->getDay()->time),
+        htmlspecialchars($order->getDay()->deliveryservice),
+        htmlspecialchars($order->product),
+        !empty($order->comment) ? '('.htmlspecialchars($order->comment).')' : '',
+        $order->price);
+    } ?>
+  </ul>
+  
+</div>

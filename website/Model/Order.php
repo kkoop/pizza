@@ -30,8 +30,18 @@ class Order
   {
     $stmt = Db::prepare("SELECT * FROM ordering WHERE day=:day AND user=:user");
     $stmt->execute([":day" => $dayId, ":user" => $_SESSION['user']->id]);
-    $stmt->setFetchMode(\PDO::FETCH_CLASS, get_class());
-    return $stmt->fetch(\PDO::FETCH_CLASS);
+    return $stmt->fetchAll(\PDO::FETCH_CLASS, get_class());
+  }
+  
+  public static function getMine($startDate=null)
+  {
+    $stmt = Db::prepare("SELECT * FROM ordering 
+      JOIN orderday ON orderday.id=ordering.day
+      WHERE user=:user AND orderday.time>FROM_UNIXTIME(:start)
+      ORDER BY orderday.time DESC");
+    $stmt->execute([":user"  => $_SESSION['user']->id,
+                    ":start" => $startDate ?: 0]);
+    return $stmt->fetchAll(\PDO::FETCH_CLASS, get_class());
   }
   
   public static function create($dayId, $product, $comment, $price, $user)

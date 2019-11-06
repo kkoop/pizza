@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 03. Dez 2018 um 22:50
--- Server-Version: 10.1.37-MariaDB-0+deb9u1
--- PHP-Version: 7.0.30-0+deb9u1
+-- Erstellungszeit: 06. Nov 2019 um 16:53
+-- Server-Version: 10.3.17-MariaDB-0+deb10u1-log
+-- PHP-Version: 7.3.11-1~deb10u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `log` (
-  `time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `time` timestamp(3) NOT NULL DEFAULT current_timestamp(3),
   `user` int(11) DEFAULT NULL,
   `text` text COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -41,7 +41,7 @@ CREATE TABLE `log` (
 CREATE TABLE `menu` (
   `id` int(11) NOT NULL,
   `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -65,7 +65,7 @@ CREATE TABLE `menuitem` (
 
 CREATE TABLE `orderday` (
   `id` int(11) NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
   `organizer` int(11) DEFAULT NULL,
   `deliveryservice` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pizza Paradies',
   `url` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE `ordering` (
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
   `fromuser` int(11) NOT NULL,
   `touser` int(11) NOT NULL,
   `amount` decimal(5,2) NOT NULL
@@ -114,7 +114,7 @@ CREATE TABLE `upload` (
   `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mime` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` mediumblob NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL DEFAULT current_timestamp(),
   `expiry` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -128,13 +128,15 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `login` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` char(60) COLLATE utf8mb4_unicode_ci NULL,
+  `password` char(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `token` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rights` char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'RW',
-  `disabled` tinyint(1) NOT NULL DEFAULT '0',
-  `notify_neworder` tinyint(1) NOT NULL DEFAULT '1',
-  `notify_orderdue` tinyint(1) NOT NULL DEFAULT '1',
-  `notify_orderready` tinyint(1) NOT NULL DEFAULT '1'
+  `disabled` tinyint(1) NOT NULL DEFAULT 0,
+  `notify_neworder` tinyint(1) NOT NULL DEFAULT 1,
+  `notify_orderdue` tinyint(1) NOT NULL DEFAULT 1,
+  `notify_orderready` tinyint(1) NOT NULL DEFAULT 1,
+  `notify_newfile` tinyint(1) NOT NULL DEFAULT 0,
+  `paypal` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -145,10 +147,10 @@ CREATE TABLE `user` (
 
 CREATE TABLE `user__passwordreset` (
   `user` int(11) NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
   `token` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `IP` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `resetted` tinyint(1) NOT NULL DEFAULT '0'
+  `resetted` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -160,7 +162,7 @@ CREATE TABLE `user__passwordreset` (
 CREATE TABLE `user__remember` (
   `token` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user` int(11) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -269,7 +271,7 @@ ALTER TABLE `upload`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Constraints der exportierten Tabellen
 --

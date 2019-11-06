@@ -91,7 +91,7 @@ class Orderday
     return Order::getAllForDay($this->id);
   }
   
-  public function getMyOrder()
+  public function getMyOrders()
   {
     return Order::getMineForDay($this->id);
   }
