@@ -6,7 +6,8 @@ class OrderController extends  Controller
 {
   public function indexAction()
   {
-    $this->view->setVars(['orders' => Model\Order::getMine()]);
+    $this->view->setVars(['title'  => "Meine Bestellungen",
+                          'orders' => Model\Order::getMine()]);
   }
 
   public function editAction()
