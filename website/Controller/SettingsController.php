@@ -8,6 +8,10 @@ class SettingsController extends Controller
   {
     $this->view->setVars(['title' => "Einstellungen"]);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      if (!empty($_POST['paypal'])) {
+        if (($pos = stripos($_POST['paypal'], "paypal.me/")) !== false)
+          $_POST['paypal'] = substr($_POST['paypal'], $pos+10);
+      }
       $_SESSION['user']->notify_neworder    = $_POST['notify_neworder']   ?? false;
       $_SESSION['user']->notify_orderdue    = $_POST['notify_orderdue']   ?? false;
       $_SESSION['user']->notify_orderready  = $_POST['notify_orderready'] ?? false;

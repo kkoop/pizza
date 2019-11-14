@@ -17,20 +17,20 @@ class Debt
     foreach ($owedPerUser as $owed) {
       $debts[$owed['user']] = $owed;
     }
-    foreach ($paymentsPerUser as $payed) {
-      if (!isset($debts[$payed['user']])) {
-        $debts[$payed['user']] = $payed;
-        $debts[$payed['user']]['amount'] = -$payed['amount'];
-      } else {
-        $debts[$payed['user']]['amount'] -= $payed['amount'];
-      }
-    }
     foreach ($owingToUser as $owed) {
       if (!isset($debts[$owed['user']])) {
         $debts[$owed['user']] = $owed;
         $debts[$owed['user']]['amount'] = -$owed['amount'];
       } else {
         $debts[$owed['user']]['amount'] -= $owed['amount'];
+      }
+    }
+    foreach ($paymentsPerUser as $payed) {
+      if (!isset($debts[$payed['user']])) {
+        $debts[$payed['user']] = $payed;
+        $debts[$payed['user']]['amount'] = -$payed['amount'];
+      } else {
+        $debts[$payed['user']]['amount'] -= $payed['amount'];
       }
     }
     foreach ($paymentsToUser as $payed) {
