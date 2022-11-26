@@ -1,7 +1,9 @@
 # Installation
-Requires Apache, PHP 7, MariaDB (or MySQL). On Debian:
+Requires Apache, PHP 7, MariaDB (or MySQL) and Bootstrap 3. On Debian:
 ```sh
-$ apt-get install apache2 libapache2-mod-php mariadb-server php-mysql
+$ apt-get install apache2 libapache2-mod-php mariadb-server php-mysql \
+    libjs-jquery libjs-jquery-ui libjs-underscore libjs-bootstrap \
+    libjs-moment libjs-eonasdan-bootstrap-datetimepicker
 ```
 
 ## Database Setup

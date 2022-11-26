@@ -3,7 +3,7 @@ FROM debian:bullseye-slim
 RUN apt-get update \
     && apt-get -y install ssmtp apache2 \ 
         libapache2-mod-php php-mysql \
-        libjs-jquery libjs-jquery-ui libjs-underscore libjs-bootstrap \
+        libjs-jquery libjs-jquery-ui libjs-underscore libjs-bootstrap libjs-moment libjs-eonasdan-bootstrap-datetimepicker \
     && rm -rf /var/lib/apt/lists/*
 
 ADD docker/ssmtp.conf /etc/ssmtp/
