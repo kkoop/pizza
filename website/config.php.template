@@ -1,5 +1,6 @@
 <?php
-define('K_BASE_URL',            "/");
+define('K_BASE_URL',            "http://localhost");
+define('K_DBSERVER',            "localhost");
 define('K_PRODUCT_NAME',        "Pizzabestelldienst");
 define('K_MAIL_FROM',           "Pizza");
 define('K_MAIL_SIGNATURE',      "-- \r\nPizza\r\nDies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n");

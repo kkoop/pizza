@@ -10,7 +10,7 @@ class Db {
   {
     if ($connect) {
       try {
-        $this->pdo = new \PDO('mysql:dbname=pizza;host=localhost', 'pizza', '932MFjxdCiSjaLjE');
+        $this->pdo = new \PDO('mysql:dbname=pizza;host='.K_DBSERVER, 'pizza', '932MFjxdCiSjaLjE');
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
       } catch (PDOException $e) {
