@@ -34,10 +34,7 @@ class UploadController extends  Controller
       if (Model\File::create($_POST['title'], $_FILES['file']['tmp_name'], $_FILES['file']['type'], $_POST['expiry'])) {
         header('Location:'.K_BASE_URL.'/upload');
         // E-Mail an alle, die eine haben möchten, aber nicht an uns selbst
-        $url = "/";
-        if (isset($_SERVER['SERVER_NAME'])) {
-          $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
-        }
+        $url = \Pizza\Library\Mailer::getServerUrl();
         foreach (Model\User::readAll() as $user) {
           if ($user->notify_newfile && $user->id != $_SESSION['user']->id) {
             \Pizza\Library\Mailer::mail($user->login, 

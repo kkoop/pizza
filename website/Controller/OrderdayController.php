@@ -35,10 +35,7 @@ class OrderdayController extends Controller
         return;
       }
       // E-Mail an alle, die eine haben möchten, aber nicht an uns selbst
-      $url = "/";
-      if (isset($_SERVER['SERVER_NAME'])) {
-        $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
-      }
+      $url = \Pizza\Library\Mailer::getServerUrl();
       foreach (Model\User::readAll() as $user) {
         if ($user->notify_neworder && $user->id != $_SESSION['user']->id) {
           \Pizza\Library\Mailer::mail($user->login, 
@@ -81,10 +78,7 @@ class OrderdayController extends Controller
         exit(1);
       }
       if ($newOrganizer) {
-        $url = "/";
-        if (isset($_SERVER['SERVER_NAME'])) {
-          $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
-        }
+        $url = \Pizza\Library\Mailer::getServerUrl();
         \Pizza\Library\Mailer::mail($day->getOrganizer()->login, 
           "Gemeinsame Bestellung übertragen", 
           sprintf("Hallo,\r\n\r\ndu wurdest als Organisator für eine gemeinsame Bestellung eingetragen.\r\n".
@@ -142,10 +136,7 @@ class OrderdayController extends Controller
       if ($user->notify_orderready && $user->id != $_SESSION['user']->id)
         $users[$user->id] = $user;
     }
-    $url = "/";
-    if (isset($_SERVER['SERVER_NAME'])) {
-      $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
-    }
+    $url = \Pizza\Library\Mailer::getServerUrl();
     foreach ($users as $user) {
       \Pizza\Library\Mailer::mail($user->login, "Bestellung ist da", 
         sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s ist angekommen.\r\n",

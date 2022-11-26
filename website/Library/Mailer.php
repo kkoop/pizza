@@ -22,6 +22,19 @@ class Mailer
     self::getInstance()->doMail($to, $subject, $message, $expiry);
   }
 
+  /**
+   * @brief util function to get the URL to be used in links
+   */
+  public static function getServerUrl()
+  {
+    if (strpos(K_BASE_URL, "http") === 0) {
+      // full URL
+      return K_BASE_URL;
+    }
+    // relative path
+    return "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
+  }
+
   protected function doMail($to, $subject, $message, $expiry=null, $bulk=false)
   {
     mail($to, $subject, $message . K_MAIL_SIGNATURE,

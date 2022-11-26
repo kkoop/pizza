@@ -267,10 +267,7 @@ class User
                              ":token"    => $hash,
                              ":rights"   => $rights))) {
       Log::info("user '$login' (".Db::lastInsertId().") created");
-      $url = "/";
-      if (isset($_SERVER['SERVER_NAME'])) {
-        $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
-      }
+      $url = \Pizza\Library\Mailer::getServerUrl();
       $mailSubject = sprintf(_("Neuer Zugang zu %s"), K_PRODUCT_NAME);
       $mailText = sprintf(_("Hallo,\r\nSie (oder jemand anders) hat gerade einen Zugang zu %s registriert. ".
           "Um ihn zu aktivieren, folgen Sie diesem Link:\r\n%s%s\r\n".

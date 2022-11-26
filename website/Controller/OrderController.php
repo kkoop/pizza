@@ -30,7 +30,7 @@ class OrderController extends  Controller
       }
       if ($orderUser->id != $_SESSION['user']->id) {
         // betroffenen Benutzer über die Änderung benachrichtigen
-        $url = "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
+        $url = \Pizza\Library\Mailer::getServerUrl();
         \Pizza\Library\Mailer::mail($orderUser->login, 
           "Änderung an deiner Bestellung",
           sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s wurde durch den Organisator %s gelöscht.\r\n",
@@ -65,7 +65,7 @@ class OrderController extends  Controller
         $after = sprintf("%s (%s) %.2f €", $order->product, $order->comment, $order->price);
         if ($orderUser->id != $_SESSION['user']->id) {
           // betroffenen Benutzer über die Änderung benachrichtigen
-          $url = "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
+          $url = \Pizza\Library\Mailer::getServerUrl();
           \Pizza\Library\Mailer::mail($orderUser->login, 
             "Änderung an deiner Bestellung",
             sprintf("Hallo,\r\n\r\ndeine Bestellung zu %s wurde durch den Organisator %s bearbeitet.\r\n".
@@ -92,7 +92,7 @@ class OrderController extends  Controller
         Model\Order::create($day->id, $_POST['product'], $_POST['comment'], $_POST['price'], $user);
         if ($user != $_SESSION['user']->id) {
           // Bestellung für anderen Benutzer wurde angelegt, betroffenen Benutzer informieren
-          $url = "http://".($_SERVER['SERVER_NAME'] ?? "").K_BASE_URL;
+          $url = \Pizza\Library\Mailer::getServerUrl();
           $after = sprintf("%s (%s) %.2f €", $_POST['product'], $_POST['comment'], $_POST['price']);
           \Pizza\Library\Mailer::mail(Model\User::read($user)->login, 
             "Bestellung in deinem Namen",
