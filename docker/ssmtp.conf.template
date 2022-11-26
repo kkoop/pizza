@@ -1,0 +1,23 @@
+# The user that gets all the mails (UID < 1000, usually the admin)
+root=<your email address>
+
+# The place where the mail goes. The actual machine name is required
+# no MX records are consulted. Commonly mailhosts are named mail.domain.com
+mailhub=<your smtp server and port, e.g. smtp.office365.com:587>
+
+# Use SSL/TLS before starting negotiation
+UseTLS=Yes
+UseSTARTTLS=Yes
+
+# Fill the following with your credentials (if requested) 
+AuthUser=<username for smtp server>
+AuthPass=<password for smtp server>
+
+# Change or uncomment the following only if you know what you are doing
+
+# Where will the mail seem to come from?
+rewriteDomain=<your domain>
+# The full hostname
+hostname=<your domain>
+# Email 'From header's can override the default domain?
+#FromLineOverride=yes

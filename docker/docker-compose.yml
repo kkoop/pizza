@@ -1,0 +1,30 @@
+version: "2"
+
+services:
+  webserver:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8088:80"
+    networks:
+      - pizzanet
+    restart: unless-stopped
+  db:
+    image: mariadb:latest
+    environment:
+      MARIADB_USER: pizza
+      MARIADB_PASSWORD: 932MFjxdCiSjaLjE
+      MARIADB_DATABASE: pizza
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
+    volumes:
+#      - ${PWD}/../db/createdb.sql:/docker-entrypoint-initdb.d/createdb.sql
+      - ${PWD}/../db/pizza.sql:/docker-entrypoint-initdb.d/pizza.sql
+    networks:
+      - pizzanet
+    restart: unless-stopped
+
+
+networks:
+  pizzanet:
+    driver: bridge

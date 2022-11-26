@@ -31,3 +31,11 @@ When updating to a new version, a database update might be required. For this, r
 $ mariadb < updatedb.sql
 ```
 in the `db` directory.
+
+## Docker
+
+Instead of installing on a Linux server, a Docker image can be built and run via docker-compose.
+
+The files `docker/config.php` and `docker/ssmtp.conf` have to be adjusted beforehand, the corresponding templates `config.php.template` and `docker/ssmtp.conf.template` can be used as a starting point. 
+
+The script `setup-docker.sh` can be used to create the config files, open an editor and start `docker-compose`. The port on which to listen is 8088 per default, and can be changed in `docker/docker-compose.yml`.
