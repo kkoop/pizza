@@ -20,6 +20,7 @@ services:
     volumes:
 #      - ${PWD}/../db/createdb.sql:/docker-entrypoint-initdb.d/createdb.sql
       - ${PWD}/../db/pizza.sql:/docker-entrypoint-initdb.d/pizza.sql
+      - mariadbdata:/var/lib/mysql
     networks:
       - pizzanet
     restart: unless-stopped
@@ -28,3 +29,6 @@ services:
 networks:
   pizzanet:
     driver: bridge
+
+volumes:
+  mariadbdata:
