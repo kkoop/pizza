@@ -1,0 +1,18 @@
+@import "/usr/share/javascript/bootstrap/less/bootstrap.less";
+
+@brand-primary:   <primary color>;
+@brand-info:      <secondary color>;
+@state-info-bg:   <secondary color>;
+@state-info-text: white;
+
+// glyphicon path
+@icon-font-path:  "/javascript/bootstrap/fonts/";
+
+// Navbar
+@navbar-height:   40px;
+@nav-link-padding: 8px;
+
+// font
+//@font-family-sans-serif: "Rotis Sans Serif W02";
+
+@import "pizza.less";
