@@ -24,6 +24,24 @@ then
     fi
 fi
 
+# setup style.less
+if [[ ! -f style.less ]]
+then
+    echo "creating style"
+    cp style.less.template style.less
+    echo "please edit your website configuration"
+    datebefore=$(stat -c %y style.less)
+    "${EDITOR:-vi}" style.less
+    dateafter=$(stat -c %y style.less)
+    if [[ $datebefore = $dateafter ]]
+    then
+        # nothing changed
+        echo "editing canceled"
+        rm style.less
+        exit 0
+    fi
+fi
+
 # setup Apache ssmtp (email)
 if [[ ! -f ssmtp.conf ]]
 then
@@ -43,7 +61,7 @@ fi
 
 # start docker-compose, run in background
 echo "starting docker-compose"
-docker-compose up -d
+docker-compose up -d --build
 
 echo "-------------------------------------"
 echo "system up"
