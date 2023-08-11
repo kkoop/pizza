@@ -136,7 +136,8 @@ CREATE TABLE `user` (
   `notify_orderdue` tinyint(1) NOT NULL DEFAULT 1,
   `notify_orderready` tinyint(1) NOT NULL DEFAULT 1,
   `notify_newfile` tinyint(1) NOT NULL DEFAULT 0,
-  `paypal` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `paypal` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `timezone` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT 'Europe/Berlin'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

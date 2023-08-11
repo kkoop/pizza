@@ -9,7 +9,8 @@ ALTER TABLE user ADD COLUMN IF NOT EXISTS (
   `notify_orderdue` BOOLEAN  NOT NULL DEFAULT TRUE,
   `notify_orderready` BOOLEAN  NOT NULL DEFAULT TRUE,
   `notify_newfile` BOOLEAN NOT NULL DEFAULT FALSE,
-  `paypal` varchar(100) DEFAULT NULL);
+  `paypal` varchar(100) DEFAULT NULL,
+  `timezone` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT 'Europe/Berlin');
 
 CREATE TABLE IF NOT EXISTS `menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
