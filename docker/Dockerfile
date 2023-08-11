@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim AS builder
+FROM debian:bookworm-slim AS builder
 
 RUN apt-get update \
     && apt-get -y install libjs-bootstrap make node-less \
@@ -9,11 +9,11 @@ RUN cd /src/pizza \
     && cp docker/style.less website/css \
     && make
 
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 RUN apt-get update \
     && apt-get -y install ssmtp apache2 locales \
-        libapache2-mod-php php-mysql \
+        libapache2-mod-php php-mysql php-intl \
         libjs-jquery libjs-jquery-ui libjs-underscore libjs-bootstrap libjs-moment libjs-eonasdan-bootstrap-datetimepicker \
     && rm -rf /var/lib/apt/lists/*
 
