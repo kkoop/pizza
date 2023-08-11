@@ -1,7 +1,7 @@
 <div class="container" id="divMain">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3>Bestellungen <?=strftime("%x %X", $orderday->time)?>
+      <h3>Bestellungen <?=\Pizza\Library\DateTimeFormatter::DateTimeFormatter()->format($orderday->time)?>
 <?php if ($showBtnEdit): ?>
         <a href="<?=K_BASE_URL?>/orderday/edit/?id=<?=$orderday->id?>" class="pull-right"><span class="glyphicon glyphicon-pencil"></span></a>
 <?php endif; ?>
@@ -25,7 +25,7 @@
 <?php 
       $sum = 0.0;
       foreach ($orders as $order) {
-        if ($orderday->organizer == $_SESSION['user']->id || ($order->user == $_SESSION['user']->id && $orderday->time > time())) {
+        if ($orderday->organizer == $_SESSION['user']->id || ($order->user == $_SESSION['user']->id && $orderday->time > new \DateTime())) {
           $editLink = sprintf('<a href="%s/order/edit/?id=%d"><span class="glyphicon glyphicon-pencil"></span></a>',
             K_BASE_URL,
             $order->id);

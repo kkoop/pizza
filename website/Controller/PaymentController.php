@@ -8,20 +8,21 @@ class PaymentController extends  Controller
   {
     $this->view->setVars(['title' => "Zahlungen"]);
     if (!empty($_REQUEST['startDate'])) {
-      $startTime = strtotime($_REQUEST['startDate']);
-      $endTime   = strtotime($_REQUEST['endDate']." 23:59:59");
+      $startTime = new \DateTime($_REQUEST['startDate'], $_SESSION['user']->timezone);
+      $endTime   = new \DateTime($_REQUEST['endDate'], $_SESSION['user']->timezone);
+      $endTime->setTime(23, 59, 59);
       if (!($endTime > $startTime))
-        $endTime = time();
+        $endTime = new \DateTime("now", $_SESSION['user']->timezone);
     } else {
-      $startTime = strtotime("-1 month");
-      $endTime   = time();
+      $startTime = new \DateTime("-1 month", $_SESSION['user']->timezone);
+      $endTime   = new \DateTime("now", $_SESSION['user']->timezone);
     }
     $payments = Model\Payment::readAll($startTime, $endTime, $_SESSION['user']->id);
     $orders = Model\Orderday::readAll($startTime, $endTime);
     $orders = array_filter($orders, function($o) { return $o->organizer==$_SESSION['user']->id;});
     $transactions = array_merge($payments, $orders);
     usort($transactions, function($a, $b) {
-      return -$a->time+$b->time;
+      return $a->time > $b->time ? -1 : 1;
     });
     $balance = 0.0;
     foreach ($transactions as $transaction) {
@@ -30,8 +31,8 @@ class PaymentController extends  Controller
       else 
         $balance -= $transaction->amount;
     }
-    $this->view->setVars(['startDate'    => strftime("%Y-%m-%d", $startTime),
-                          'endDate'      => strftime("%Y-%m-%d", $endTime),
+    $this->view->setVars(['startDate'    => $startTime->format("Y-m-d"),
+                          'endDate'      => $endTime->format("Y-m-d"),
                           'transactions' => $transactions,
                           'balance'      => $balance]);
   }
@@ -96,13 +97,14 @@ class PaymentController extends  Controller
     }
     $this->view->setTitle("Zahlungen");
     if (!empty($_REQUEST['startDate'])) {
-      $startTime = strtotime($_REQUEST['startDate']);
-      $endTime   = strtotime($_REQUEST['endDate']." 23:59:59");
+      $startTime = new \DateTime($_REQUEST['startDate'], $_SESSION['user']->timezone);
+      $endTime   = new \DateTime($_REQUEST['endDate'], $_SESSION['user']->timezone);
+      $endTime->setTime(23, 59, 59);
       if (!($endTime > $startTime))
-        $endTime = time();
+        $endTime = new \DateTime("now", $_SESSION['user']->timezone);
     } else {
-      $startTime = strtotime("-1 month");
-      $endTime   = time();
+      $startTime = new \DateTime("-1 month", $_SESSION['user']->timezone);
+      $endTime   = new \DateTime("now", $_SESSION['user']->timezone);
     }
     $users = Model\User::readAll();
     $payments = Model\Payment::readAll($startTime, $endTime, null);
@@ -131,8 +133,8 @@ class PaymentController extends  Controller
         }
       }
     }
-    $this->view->setVars(['startDate'     => strftime("%Y-%m-%d", $startTime),
-                          'endDate'       => strftime("%Y-%m-%d", $endTime),
+    $this->view->setVars(['startDate'     => $startTime->format("Y-m-d"),
+                          'endDate'       => $endTime->format("Y-m-d"),
                           'payments'      => $payments,
                           'userMap'       => $userMap,
                           'paymentMatrix' => $paymentMatrix,

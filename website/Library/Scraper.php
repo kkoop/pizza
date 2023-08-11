@@ -5,9 +5,9 @@ abstract class Scraper
 {
   public static function create($url) 
   {
-    if (stripos($url, "lieferando")) {
+    /*if (stripos($url, "lieferando")) {
       return new LieferandoScraper($url);
-    }
+    }*/
     return null;
   }
   

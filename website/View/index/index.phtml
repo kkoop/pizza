@@ -12,7 +12,7 @@
 <?php foreach ($orders as $order): ?>
       <li>
         <a href="<?=K_BASE_URL?>/orderday/view/?id=<?=$order->id?>">
-          <?= strftime("%x %X", $order->time) ?> - <?= htmlspecialchars($order->deliveryservice) ?>
+          <?= \Pizza\Library\DateTimeFormatter::DateTimeFormatter()->format($order->time) ?> - <?= htmlspecialchars($order->deliveryservice) ?>
         </a>
       </li>
 <?php endforeach; ?>

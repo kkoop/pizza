@@ -12,10 +12,9 @@ class IndexController extends Controller
       header('Location:'.K_BASE_URL.'/index/login');
       exit(0);
     }
-    $today = new \DateTime;
-    $today->setTime(0, 0, 0);
+    $today = new \DateTime("today", $_SESSION['user']->timezone);
     $this->view->setVars(['title'  => "Start",
-                          'orders' => Model\Orderday::readAll($today->getTimestamp()),
+                          'orders' => Model\Orderday::readAll($today),
                           'debts'  => Model\Debt::getDebts()]);
   }
 

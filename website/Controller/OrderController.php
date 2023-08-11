@@ -12,6 +12,7 @@ class OrderController extends  Controller
 
   public function editAction()
   {
+    $now = new \DateTime("now");
     if (isset($_POST['delete'])) {
       // Eintrag löschen
       if (!($order = Model\Order::read($_POST['order']))) {
@@ -24,7 +25,7 @@ class OrderController extends  Controller
         $this->view->setError("Bestellung von anderem Benutzer");
         return;
       }
-      if ($order->getDay()->time < time() && $day->organizer != $_SESSION['user']->id) {  // Organisator darf nachträglich ändern
+      if ($order->getDay()->time < $now && $day->organizer != $_SESSION['user']->id) {  // Organisator darf nachträglich ändern
         $this->view->setError("Abgelaufene Bestellung kann nicht geändert werden");
         return;
       }
@@ -53,7 +54,7 @@ class OrderController extends  Controller
           $this->view->setError("Bestellung von anderem Benutzer");
           return;
         }
-        if ($order->getDay()->time < time() && $day->organizer != $_SESSION['user']->id) {  // Organisator darf nachträglich ändern
+        if ($order->getDay()->time < $now && $day->organizer != $_SESSION['user']->id) {  // Organisator darf nachträglich ändern
           $this->view->setError("Abgelaufene Bestellung kann nicht geändert werden");
           return;
         }
@@ -81,7 +82,7 @@ class OrderController extends  Controller
           $this->view->setError("Fehler beim Lesen des Bestelltags");
           return;
         }
-        if ($day->time < time()) {
+        if ($day->time < $now) {
           $this->view->setError("Zu abgelaufener Bestellung kann nichts hinzugefügt werden");
           return;
         }

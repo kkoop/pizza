@@ -6,9 +6,10 @@ class OrderdayController extends Controller
 {
   public function indexAction()
   {
+    $now = new \DateTime("now", $_SESSION['user']->timezone);
     $this->view->setVars(['title' => "Bestellungen"]);
-    $this->view->setVars(['openOrderDays' => Model\Orderday::readAll(time()),
-                          'pastOrderDays' => Model\Orderday::readAll(strtotime("-1 month"), time())]);
+    $this->view->setVars(['openOrderDays' => Model\Orderday::readAll($now),
+                          'pastOrderDays' => Model\Orderday::readAll(new \DateTime("-1 month"), $now)]);
   }
 
   public function viewAction()
@@ -18,11 +19,13 @@ class OrderdayController extends Controller
       $this->view->setError("Fehler beim Lesen des Bestelltages");
       return;
     }
+    $now = new \DateTime("now", $_SESSION['user']->timezone);
+    $yesterday = new \DateTime("-1 day", $_SESSION['user']->timezone);
     $this->view->setVars(['orderday'          => $day,
                           'orders'            => $day->getOrders(),
-                          'showBtnAdd'        => $day->time > time(),
+                          'showBtnAdd'        => $day->time > $now,
                           'showBtnEdit'       => $day->organizer == $_SESSION['user']->id,
-                          'showBtnOrderReady' => $day->time < time() && $day->time+86400 > time() 
+                          'showBtnOrderReady' => $day->time < $now && $day->time > $yesterday
                                              && !$day->mailready && $day->organizer==$_SESSION['user']->id]);
   }
   
@@ -30,7 +33,13 @@ class OrderdayController extends Controller
   {
     $this->view->setVars(['title' => "Bestellungen"]);
     if (isset($_POST['time'])) {
-      if (($day = Model\Orderday::create($_POST['time'], $_POST['deliveryService'], $_POST['deliveryServiceUrl'])) == null) {
+      // time is in localtime, convert to DateTime object with user timezone
+      $time = new \DateTime($_POST['time'], $_SESSION['user']->timezone);
+      if ($time === false) {
+        $this->view->setError("Wrong time format");
+        return;
+      }
+      if (($day = Model\Orderday::create($time, $_POST['deliveryService'], $_POST['deliveryServiceUrl'])) == null) {
         $this->view->setError("Fehler beim Anlegen des Bestelltages");
         return;
       }
@@ -43,7 +52,7 @@ class OrderdayController extends Controller
             sprintf("Hallo,\r\n\r\neine neue gemeinsame Bestellung wurde angelegt.\r\n".
               "Unter %s kannst du deine Bestellung hinzufügen.\r\n",
               "$url/orderday/view/?id=".$day->id),
-            strtotime($_POST['time']),
+            $time->getTimestamp(),
             true);
         }
       }
@@ -68,7 +77,13 @@ class OrderdayController extends Controller
       return;
     }
     if (isset($_POST['time'])) {
-      $day->time = $_POST['time'];
+      // time is in localtime, convert to DateTime
+      $time = new \DateTime($_POST['time'], $_SESSION['user']->timezone);
+      if ($time === false) {
+        $this->view->setError("Wrong time format");
+        return;
+      }
+      $day->time = $time;
       $day->deliveryservice = $_POST['deliveryService'];
       $day->url = $_POST['deliveryServiceUrl'];
       $newOrganizer = $day->organizer != $_POST['organizer'];
@@ -84,7 +99,7 @@ class OrderdayController extends Controller
           sprintf("Hallo,\r\n\r\ndu wurdest als Organisator für eine gemeinsame Bestellung eingetragen.\r\n".
             "Unter %s kannst du die Bestellung ansehen und bearbeiten.\r\n",
             "$url/orderday/view/?id=".$day->id),
-          strtotime($_POST['time']));
+          $time->getTimestamp());
       }
       header("Location: ".K_BASE_URL."/orderday/view/?id={$day->id}");
       exit(0);

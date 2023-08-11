@@ -17,14 +17,14 @@
         foreach ($transactions as $transaction) {
           if (get_class($transaction) == "Pizza\Model\Payment") {
             printf('<tr><td>%s</td><td>%s</td><td>%s</td><td class="currency %s">%.2f €</td></tr>',
-              strftime("%x", $transaction->time),
+              \Pizza\Library\DateTimeFormatter::DateFormatter()->format($transaction->time),
               htmlspecialchars($transaction->fromName),
               htmlspecialchars($transaction->toName),
               $transaction->toId == $_SESSION['user']->id ? "positive" : "negative",
               $transaction->amount);
           } else {
             printf('<tr><td>%s</td><td>%s</td><td>%s</td><td class="currency %s">%.2f €</td></tr>',
-              strftime("%x", $transaction->time),
+              \Pizza\Library\DateTimeFormatter::DateFormatter()->format($transaction->time),
               htmlspecialchars($_SESSION['user']->name),
               htmlspecialchars($transaction->deliveryservice),
               "negative",

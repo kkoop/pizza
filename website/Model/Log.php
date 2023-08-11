@@ -40,37 +40,6 @@ class Log
   }
 
 /**
- * @brief Protokolliert die Ansicht eines Geräts für die Statistik
- * 
- * @param int $id Datenbank-ID des LD-Gerätes
- * @return void
- */
-  public static function ldDeviceOpened($id)
-  {
-    if ($_SESSION['user']->kdnr > 0) {
-      $stmt = Db::prepare("INSERT INTO ld__devstat (ref,date,opened) VALUES (?,CURDATE(),1) ".
-        "ON DUPLICATE KEY UPDATE opened=opened+1");
-      $stmt->execute(array($id));
-    }
-  }
-
-/**
- * @brief Protokolliert die Ansicht eines Experiments für die Statistik
- * 
- * @param int $id Datenbank-ID des LD-Experiments
- * @return void
- */
-  public static function ldExperimentOpened($id)
-  {
-    if ($_SESSION['user']->kdnr > 0) {
-      $stmt = Db::prepare("INSERT INTO ld__expstat (ref,date,opened) VALUES (?,CURDATE(),1) ".
-        "ON DUPLICATE KEY UPDATE opened=opened+1");
-      $stmt->execute(array($id));
-    }
-  }
-
-
-/**
  * @brief Handler für unbehandelte Ausnahmen
  * 
  * Ruft fatal() auf mit dem Text der Ausnahmen.

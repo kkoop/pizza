@@ -6,5 +6,6 @@ define('K_MAIL_FROM',           "Pizza");
 define('K_MAIL_SIGNATURE',      "-- \r\nPizza\r\nDies ist eine automatisch generierte E-Mail. Antworten werden nicht zugestellt.\r\n");
 define('K_MIN_PASSWORD_LEN',    4);
 define('K_LOGO_URL',            K_BASE_URL . '/img/Logo.svg');
+define('K_BROKEN_LOGO_URL',     K_BASE_URL . '/img/Logo.svg');
 define('K_ORGANIZER_CAN_EDIT',  true);  //!< Organizer can edit orders of other users
 define('K_ORGANIZER_CAN_ORDER', true);  //!< Organizer can add orders for other users

@@ -5,7 +5,7 @@
     <div class="form-group row">
       <label class="col-sm-2 control-label">Bestellzeit:</label>
 <!--      <div class="col-sm-4"><input type="datetime-local" class="form-control" name="time"></div>-->
-      <div class="col-sm-4"><input type="text" id="inputTime" class="form-control" name="time" value="<?=strftime("%x %X", $day->time)?>" required></div>
+      <div class="col-sm-4"><input type="text" id="inputTime" class="form-control" name="time" value="<?=\Pizza\Library\DateTimeFormatter::DateTimeFormatter()->format($day->time)?>" required></div>
     </div>
     <div class="form-group row">
       <label class="col-sm-2 control-label">Lieferdienst:</label>
@@ -38,7 +38,7 @@ $("#inputTime").datetimepicker({
   locale: 'de',
   format: 'L LT'
 });
-$(function() { $("#inputTime").data("DateTimePicker").date(moment().hours(11).minutes(30)); });
+//$(function() { $("#inputTime").data("DateTimePicker").date(moment().hours(11).minutes(30)); });
 $("form").submit(function(e) {
   $("#inputTime").data("DateTimePicker").format('YYYY-MM-DD HH:mm');
 });

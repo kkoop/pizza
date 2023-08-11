@@ -18,9 +18,12 @@ class User
   public $notfiy_orderready;
   public $notify_newfile;
   public $paypal;
+  public $timezone;
 
   public function __construct()
   {
+    if ($this->timezone)
+      $this->timezone = new \DateTimeZone($this->timezone);
   }
 
 /**

@@ -11,6 +11,13 @@ class Payment
   public $toName;
   public $amount;
   
+  public function __construct()
+  {
+    $t = new \DateTime();
+    $t->setTimestamp($this->time);
+    $this->time = $t;
+  }
+  
   public static function readAll($startDate, $endDate, $user)
   {
     $stmt = Db::prepare("SELECT payment.id,UNIX_TIMESTAMP(time) AS time,amount,".
@@ -20,7 +27,8 @@ class Payment
       "JOIN user AS tuser ON tuser.id=payment.touser ".
       "WHERE time>=FROM_UNIXTIME(:start) AND time<=FROM_UNIXTIME(:end) ".
         ($user ? "AND (payment.fromuser=:user OR payment.touser=:user2)" : ""));
-    $params = [":start" => $startDate, ":end" => $endDate];
+    $params = [":start" => $startDate->getTimestamp(), 
+               ":end"   => $endDate->getTimestamp()];
     if ($user)
       $params[":user"] = $params[":user2"] = $user;
     $stmt->execute($params);
@@ -30,7 +38,9 @@ class Payment
   public static function received($fromUser, $amount)
   {
     $stmt = Db::prepare("INSERT INTO payment (fromuser,touser,amount) VALUES (:from,:to,:amount)");
-    if ($stmt->execute([':from' => $fromUser, ':to' => $_SESSION['user']->id, ':amount' => $amount])) {
+    if ($stmt->execute([':from'   => $fromUser, 
+                        ':to'     => $_SESSION['user']->id, 
+                        ':amount' => $amount])) {
       Log::info(sprintf("got payed %.2f € from user %d", $amount, $fromUser));
       return true;
     }

@@ -17,7 +17,7 @@
 <?php   
         foreach ($payments as $payment) {
           printf('<tr><td>%s</td><td>%s</td><td>%s</td><td class="currency">%.2f €</td></tr>',
-            strftime("%x", $payment->time),
+            \Pizza\Library\DateTimeFormatter::DateFormatter()->format($payment->time),
             htmlspecialchars($payment->fromName),
             htmlspecialchars($payment->toName),
             $payment->amount);
