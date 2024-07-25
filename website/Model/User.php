@@ -22,9 +22,12 @@ class User
 
   public function __construct()
   {
-    if ($this->timezone)
-      $this->timezone = new \DateTimeZone($this->timezone);
-  }
+    if ($this->timezone == null)
+    {
+      $this->timezone = "Europe/Berlin";
+    }
+    $this->timezone = new \DateTimeZone($this->timezone);
+}
 
 /**
  * @brief Funktion, die beim Deserialisieren aufgerufen wird
@@ -264,7 +267,7 @@ class User
   {
     $token = bin2hex(random_bytes(32));
     $hash = hash("sha256", $token);
-    $stmt = Db::prepare("INSERT INTO user (login,name,token,rights) VALUES (:login,:name,:token,:rights)");
+    $stmt = Db::prepare("INSERT INTO user (login,name,token,rights,timezone) VALUES (:login,:name,:token,:rights,'Europe/Berlin')");
     if ($stmt->execute(array(":login"    => $login,
                              ":name"     => $name,
                              ":token"    => $hash,
